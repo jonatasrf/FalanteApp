@@ -19,12 +19,14 @@ function App() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('App.jsx: getSession() result:', session);
       setSession(session);
     });
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
+      console.log('App.jsx: onAuthStateChange event:', _event, 'session:', session);
       setSession(session);
     });
 

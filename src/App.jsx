@@ -6,7 +6,7 @@ import { CssBaseline } from '@mui/material';
 import { supabase } from './supabaseClient';
 import MainApp from './components/MainApp';
 import './App.css';
-import './airbnb-theme.css';
+import './falante-theme.css';
 
 const darkTheme = createTheme({
   palette: {

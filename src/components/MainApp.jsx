@@ -34,6 +34,16 @@ export default function MainApp({ session }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredConversations, setFilteredConversations] = useState([]);
 
+  // Handle Supabase auth callback redirect
+  useEffect(() => {
+    if (window.location.pathname.includes('/auth/callback')) {
+      // Supabase handles the session automatically
+      // Redirect to home and clean up URL
+      setActiveView(VIEWS.HOME);
+      window.history.replaceState({}, document.title, window.location.origin + window.location.pathname.replace('/auth/callback', ''));
+    }
+  }, []);
+
   // Redirect to home when user logs in
   useEffect(() => {
     if (session && activeView === VIEWS.LOGIN) {

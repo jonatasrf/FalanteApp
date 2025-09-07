@@ -36,7 +36,7 @@ export default function MainApp({ session }) {
 
   // Handle Supabase auth callback redirect
   useEffect(() => {
-    if (window.location.hash.includes('#/auth/callback')) {
+    if (window.location.hash.includes('access_token')) {
       // Supabase handles the session automatically
       // Redirect to home and clean up URL
       setActiveView(VIEWS.HOME);

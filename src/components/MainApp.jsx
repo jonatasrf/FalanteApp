@@ -40,7 +40,7 @@ export default function MainApp({ session }) {
       // Supabase handles the session automatically
       // Redirect to home and clean up URL
       setActiveView(VIEWS.HOME);
-      window.history.replaceState({}, document.title, window.location.origin + window.location.pathname);
+      // window.history.replaceState({}, document.title, window.location.origin + window.location.pathname);
     }
   }, []);
 

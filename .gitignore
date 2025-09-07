@@ -50,3 +50,7 @@ Thumbs.db
 *.backup
 *.tmp
 *.temp
+
+# Audio and voice generation files
+Gerador_Voz_Elevenlab/
+Phrases/

@@ -1,9 +1,0 @@
-[
-  {"text": "Can you believe this weather lately? It's absolutely crazy!", "audioPath": ""},
-  {"text": "Tell me about it! Yesterday it was so hot I thought summer had come early, and now I'm wearing a jacket.", "audioPath": ""},
-  {"text": "I know, right? This morning it was sunny, and then out of nowhere, we got that huge downpour of rain.", "audioPath": ""},
-  {"text": "It's so unpredictable. My weather app can't even keep up. It changes its mind every hour!", "audioPath": ""},
-  {"text": "It makes you wonder, doesn't it? Everyone talks about it, but it feels like we're all just watching it happen.", "audioPath": ""},
-  {"text": "Exactly. We just have to adapt day by day. I guess the only thing to do is to always be prepared for anything.", "audioPath": ""},
-  {"text": "You're right. Just trust yourself, and you will know how to dress for this madness!", "audioPath": ""}
-]

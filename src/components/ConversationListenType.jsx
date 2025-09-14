@@ -31,7 +31,6 @@ export default function ConversationListenType({ conversation, onConversationCom
     const [difficultyLevel, setDifficultyLevel] = useState('normal');
     const [consecutiveCorrect, setConsecutiveCorrect] = useState(0);
     const [consecutiveErrors, setConsecutiveErrors] = useState(0);
-    const [responseTime, setResponseTime] = useState(0);
     const [startTime, setStartTime] = useState(null);
 
     // Função para atualizar dificuldade baseada no desempenho
@@ -95,82 +94,119 @@ export default function ConversationListenType({ conversation, onConversationCom
         }
     };
 
-    // Sistema de feedback contextual
+    // Sistema de feedback contextual aprimorado
     const getContextualFeedback = (userText, correctText, isCorrect, currentPhraseIndex) => {
         const phraseKey = `phrase_${currentPhraseIndex}`;
         const previousErrors = phraseErrors[phraseKey] || 0;
 
         if (isCorrect) {
-            // Feedback for correct answer
+            // Feedback for correct answer with variety and streak recognition
+            const successMessages = [
+                { icon: '🎯', message: 'Bullseye! Perfect match!' },
+                { icon: '⭐', message: 'Outstanding! You nailed it!' },
+                { icon: '🎉', message: 'Fantastic! Spot on!' },
+                { icon: '🏆', message: 'Champion! Excellent work!' },
+                { icon: '💎', message: 'Brilliant! You\'re a star!' },
+                { icon: '🚀', message: 'Amazing! You\'re flying through this!' },
+                { icon: '🌟', message: 'Superb! Keep shining!' },
+                { icon: '💫', message: 'Incredible! You\'re on fire!' }
+            ];
+
             if (previousErrors === 0) {
+                // First try success
+                const randomMessage = successMessages[Math.floor(Math.random() * successMessages.length)];
                 return {
-                    message: `🎉 Perfect! You got it right on the first try!`,
+                    message: `${randomMessage.icon} ${randomMessage.message} First try perfection!`,
                     type: 'correct',
                     severity: 'success'
                 };
             } else if (previousErrors === 1) {
                 return {
-                    message: `💪 Great! You corrected it and got it right!`,
+                    message: `💪 Victory! You conquered that challenge!`,
                     type: 'correct',
                     severity: 'success'
                 };
             } else {
                 return {
-                    message: `🏆 Amazing! You persevered and succeeded!`,
+                    message: `🔥 Legendary! You never gave up and succeeded!`,
                     type: 'correct',
                     severity: 'success'
                 };
             }
         } else {
-            // Feedback for incorrect answer
+            // Enhanced error feedback with helpful guidance
             const userWords = userText.split(/\s+/).filter(Boolean);
             const correctWords = correctText.split(/\s+/).filter(Boolean);
 
-            // Check if it's spelling error or incomplete sentence
+            // Check error types
             const hasSpellingErrors = userWords.some((word, i) =>
                 i < correctWords.length && normalizeText(word) !== normalizeText(correctWords[i])
             );
+            const isIncomplete = userWords.length < correctWords.length;
+            const hasExtraWords = userWords.length > correctWords.length;
 
             if (previousErrors === 0) {
-                // First error in this phrase
+                // First attempt - encouraging guidance
                 if (userWords.length === 0) {
                     return {
-                        message: `💭 Let's get started! Type what you heard.`,
+                        message: `🎧 Ready to start? Click "Speak" to hear the phrase, then type what you heard!`,
                         type: 'incorrect',
-                        severity: 'error'
+                        severity: 'info'
                     };
-                } else if (hasSpellingErrors) {
+                } else if (isIncomplete) {
                     return {
-                        message: `📝 Almost there! There are some spelling errors.<br/>${generateWordDiffHtml(correctText, userText)}`,
+                        message: `📝 You're on the right track! The sentence needs ${correctWords.length - userWords.length} more word(s).<br/>${generateWordDiffHtml(correctText, userText)}`,
                         type: 'incorrect',
-                        severity: 'error'
+                        severity: 'warning'
                     };
-                } else if (userWords.length < correctWords.length) {
+                } else if (hasSpellingErrors && !hasExtraWords) {
                     return {
-                        message: `📖 The sentence is incomplete. Keep typing!<br/>${generateWordDiffHtml(correctText, userText)}`,
+                        message: `🔤 So close! Check the spelling of these words:<br/>${generateWordDiffHtml(correctText, userText)}`,
                         type: 'incorrect',
-                        severity: 'error'
+                        severity: 'warning'
+                    };
+                } else if (hasExtraWords) {
+                    return {
+                        message: `✂️ Almost there! You have some extra words. Focus on the exact phrase:<br/>${generateWordDiffHtml(correctText, userText)}`,
+                        type: 'incorrect',
+                        severity: 'warning'
                     };
                 }
             } else {
-                // Repeated error
+                // Repeated attempts - more specific help
+                const helpfulHints = [
+                    '🎯 Listen carefully to the pronunciation',
+                    '📝 Pay attention to silent letters',
+                    '🔤 Check for British vs American spelling',
+                    '🎵 Focus on the rhythm and stress',
+                    '✨ Try writing it slowly, word by word'
+                ];
+                const randomHint = helpfulHints[Math.floor(Math.random() * helpfulHints.length)];
+
                 if (hasSpellingErrors) {
                     return {
-                        message: `🔍 Let's focus on the details! Check the spelling.<br/>${generateWordDiffHtml(correctText, userText)}`,
+                        message: `🔍 Let's zoom in on the details! ${randomHint}<br/>${generateWordDiffHtml(correctText, userText)}`,
+                        type: 'incorrect',
+                        severity: 'error'
+                    };
+                } else if (isIncomplete) {
+                    return {
+                        message: `📖 Keep building! You're missing some words:<br/>${generateWordDiffHtml(correctText, userText)}`,
                         type: 'incorrect',
                         severity: 'error'
                     };
                 } else {
                     return {
-                        message: `✨ Keep going! You're almost there!<br/>${generateWordDiffHtml(correctText, userText)}`,
+                        message: `💡 You're getting warmer! ${randomHint}<br/>${generateWordDiffHtml(correctText, userText)}`,
                         type: 'incorrect',
                         severity: 'error'
                     };
                 }
             }
 
+            // Fallback
             return {
-                message: `❌ Incorrect:<br/>${generateWordDiffHtml(correctText, userText)}`,
+                message: `🤔 Let's try again! Listen once more and focus on the details.<br/>${generateWordDiffHtml(correctText, userText)}`,
                 type: 'incorrect',
                 severity: 'error'
             };
@@ -250,14 +286,7 @@ export default function ConversationListenType({ conversation, onConversationCom
     useEffect(() => {
         const savedProgress = conversationProgress[conversation.id];
         if (savedProgress && !savedProgress.dialogue_completed) {
-            let targetPhraseIndex = savedProgress.current_phrase_index || 0;
-
-            // Se a frase atual já foi respondida corretamente, avançar para a próxima
-            if (savedProgress.is_correct === true && targetPhraseIndex < conversation.phrases.length - 1) {
-                targetPhraseIndex += 1;
-            }
-
-            setCurrentPhraseIndex(targetPhraseIndex);
+            setCurrentPhraseIndex(savedProgress.current_phrase_index || 0);
         }
     }, [conversation.id, conversationProgress, conversation.phrases.length]);
 
@@ -439,6 +468,23 @@ export default function ConversationListenType({ conversation, onConversationCom
                         animation: 'successPulse 2s ease-in-out infinite'
                     }
                 };
+            case 'warning':
+                return {
+                    ...baseSx,
+                    bgcolor: 'linear-gradient(135deg, #ff9800 0%, #ffb74d 100%)',
+                    color: 'white',
+                    border: '2px solid #ff9800',
+                    '&::before': {
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: '4px',
+                        background: 'linear-gradient(90deg, #ff9800, #ffb74d, #ff9800)',
+                        animation: 'warningPulse 2s ease-in-out infinite'
+                    }
+                };
             case 'error':
                 return {
                     ...baseSx,
@@ -523,6 +569,24 @@ export default function ConversationListenType({ conversation, onConversationCom
                         {difficultyLevel === 'easy' ? '🐣 Easy' :
                          difficultyLevel === 'normal' ? '⚖️ Normal' : '🔥 Hard'}
                     </Box>
+                </Box>
+                <Box sx={{ mb: 2 }}>
+                    <LinearProgress
+                        variant="determinate"
+                        value={((currentPhraseIndex + 1) / conversation.phrases.length) * 100}
+                        sx={{
+                            height: 8,
+                            borderRadius: 4,
+                            backgroundColor: 'rgba(0, 255, 255, 0.1)',
+                            '& .MuiLinearProgress-bar': {
+                                backgroundColor: '#00ffff',
+                                borderRadius: 4,
+                            }
+                        }}
+                    />
+                    <Typography variant="caption" sx={{ color: '#e0e0e0', mt: 0.5, display: 'block', textAlign: 'center' }}>
+                        {Math.round(((currentPhraseIndex + 1) / conversation.phrases.length) * 100)}% Complete
+                    </Typography>
                 </Box>
 
                 <Box sx={{

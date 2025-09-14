@@ -78,11 +78,8 @@ export default function UserMenu({ session, setActiveView, supabase }) {
                   {userProfile?.email}
                 </div>
               </div>
-              <a href="#" onClick={() => { setActiveView('Profile'); setMenuOpen(false); }}>
-                Profile
-              </a>
-              <a href="#" onClick={() => { setActiveView('Configurations'); setMenuOpen(false); }}>
-                Configurations
+              <a href="#" onClick={() => { setActiveView('Settings'); setMenuOpen(false); }}>
+                Settings
               </a>
               <a href="#" onClick={() => { supabase.auth.signOut(); setMenuOpen(false); }}>
                 Logout

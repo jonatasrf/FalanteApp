@@ -8,7 +8,8 @@ import Login from './Login';
 import DiamondPopup from './DiamondPopup';
 import LevelUpPopup from './LevelUpPopup';
 import UpdatePassword from './UpdatePassword';
-import ProfilePage from './ProfilePage';
+import ProgressPage from './ProgressPage';
+import SettingsPage from './SettingsPage';
 import DonationPage from './DonationPage';
 import Header from './Header';
 import CategoriesHeader from './CategoriesHeader';
@@ -160,7 +161,10 @@ export default function MainApp({ session }) {
         return <UpdatePassword />;
     }
     if (activeView === VIEWS.PROFILE) {
-        return <ProfilePage />;
+        return <ProgressPage />;
+    }
+    if (activeView === 'Settings') {
+        return <SettingsPage />;
     }
     if (activeView === VIEWS.DONATION) {
         return <DonationPage />;

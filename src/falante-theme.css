@@ -235,15 +235,11 @@
   width: 200px !important;
   height: 200px !important;
   margin: 0 !important;
-  box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
   z-index: 1;
 }
 
 .conversation-card:hover {
   border: 2px solid #ff6b6b;
-  box-shadow: 0 0 30px rgba(255, 107, 107, 0.6), 0 0 50px rgba(255, 107, 107, 0.3);
-  transform: translateY(-5px);
-  z-index: 10;
 }
 
 /* Mobile Responsiveness */
@@ -554,6 +550,15 @@
 }
 
 @keyframes successPulse {
+  0%, 100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes warningPulse {
   0%, 100% {
     opacity: 0.8;
   }

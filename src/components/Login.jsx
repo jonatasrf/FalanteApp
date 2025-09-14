@@ -123,7 +123,7 @@ export default function Login() {
             const { error } = await supabase.auth.signInWithOAuth({
                 provider: 'google',
                 options: {
-                    redirectTo: 'https://jonatasrf.github.io/FalanteApp/#'
+                    redirectTo: window.location.origin + window.location.pathname
                 }
             });
             if (error) throw error;

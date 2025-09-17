@@ -220,182 +220,44 @@ export default function MainApp({ session }) {
     switch (activeView) {
       case VIEWS.HOME: {
         return (
-          <div style={{
-            maxWidth: '1200px',
-            margin: '0 auto',
-            padding: '2rem',
-            textAlign: 'center',
-            background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)',
-            minHeight: '100vh',
-            position: 'relative'
-          }}>
-            <div style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: `
-                radial-gradient(circle at 20% 80%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 107, 107, 0.1) 0%, transparent 50%)
-              `,
-              pointerEvents: 'none'
-            }}></div>
-
-            <div style={{ position: 'relative', zIndex: 1 }}>
-              <h1 style={{
-                fontSize: '3rem',
-                marginBottom: '2rem',
-                color: '#ffffff',
-                textShadow: '0 0 20px rgba(0, 255, 255, 0.8), 0 0 40px rgba(0, 255, 255, 0.4)',
-                background: 'linear-gradient(45deg, #00ffff, #ff6b6b)',
-                backgroundClip: 'text',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent'
-              }}>
+          <div className="home-container">
+            <div className="home-background"></div>
+            <div className="home-content">
+              <h1 className="home-title">
                 Welcome to Falante
               </h1>
-
-              <p style={{
-                fontSize: '1.5rem',
-                marginBottom: '2rem',
-                color: '#e0e0e0',
-                lineHeight: '1.6',
-                textShadow: '0 0 10px rgba(255, 255, 255, 0.3)'
-              }}>
+              <p className="home-subtitle">
                 Master English conversation skills through interactive learning
               </p>
-
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-                gap: '2rem',
-                marginTop: '3rem'
-              }}>
-                <div style={{
-                  background: 'rgba(26, 26, 46, 0.9)',
-                  backdropFilter: 'blur(20px)',
-                  border: '2px solid #00ffff',
-                  borderRadius: '12px',
-                  color: 'white',
-                  padding: '2rem',
-                  boxShadow: '0 0 20px rgba(0, 255, 255, 0.3)',
-                  transition: 'all 0.3s ease'
-                }}>
-                  <h3 style={{
-                    marginBottom: '1rem',
-                    color: '#00ffff',
-                    textShadow: '0 0 10px rgba(0, 255, 255, 0.5)'
-                  }}>
-                    🎧 Listen & Learn
-                  </h3>
-                  <p style={{
-                    color: '#e0e0e0',
-                    textShadow: '0 0 5px rgba(255, 255, 255, 0.3)'
-                  }}>
+              <div className="home-features">
+                <div className="home-feature-card">
+                  <h3>🎧 Listen & Learn</h3>
+                  <p>
                     Practice your listening skills with native speaker audio and learn natural conversation patterns.
                   </p>
                 </div>
-
-                <div style={{
-                  background: 'rgba(26, 26, 46, 0.9)',
-                  backdropFilter: 'blur(20px)',
-                  border: '2px solid #ff6b6b',
-                  borderRadius: '12px',
-                  color: 'white',
-                  padding: '2rem',
-                  boxShadow: '0 0 20px rgba(255, 107, 107, 0.3)',
-                  transition: 'all 0.3s ease'
-                }}>
-                  <h3 style={{
-                    marginBottom: '1rem',
-                    color: '#ff6b6b',
-                    textShadow: '0 0 10px rgba(255, 107, 107, 0.5)'
-                  }}>
-                    ✏️ Interactive Practice
-                  </h3>
-                  <p style={{
-                    color: '#e0e0e0',
-                    textShadow: '0 0 5px rgba(255, 255, 255, 0.3)'
-                  }}>
+                <div className="home-feature-card">
+                  <h3>✏️ Interactive Practice</h3>
+                  <p>
                     Type what you hear and get instant feedback to improve your spelling and comprehension.
                   </p>
                 </div>
-
-                <div style={{
-                  background: 'rgba(26, 26, 46, 0.9)',
-                  backdropFilter: 'blur(20px)',
-                  border: '2px solid #00ffff',
-                  borderRadius: '12px',
-                  color: 'white',
-                  padding: '2rem',
-                  boxShadow: '0 0 20px rgba(0, 255, 255, 0.3)',
-                  transition: 'all 0.3s ease'
-                }}>
-                  <h3 style={{
-                    marginBottom: '1rem',
-                    color: '#00ffff',
-                    textShadow: '0 0 10px rgba(0, 255, 255, 0.5)'
-                  }}>
-                    🧠 Knowledge Tests
-                  </h3>
-                  <p style={{
-                    color: '#e0e0e0',
-                    textShadow: '0 0 5px rgba(255, 255, 255, 0.3)'
-                  }}>
+                <div className="home-feature-card">
+                  <h3>🧠 Knowledge Tests</h3>
+                  <p>
                     Test your understanding with quizzes that reinforce what you've learned in each conversation.
                   </p>
                 </div>
-
-                <div style={{
-                  background: 'rgba(26, 26, 46, 0.9)',
-                  backdropFilter: 'blur(20px)',
-                  border: '2px solid #ff6b6b',
-                  borderRadius: '12px',
-                  color: 'white',
-                  padding: '2rem',
-                  boxShadow: '0 0 20px rgba(255, 107, 107, 0.3)',
-                  transition: 'all 0.3s ease'
-                }}>
-                  <h3 style={{
-                    marginBottom: '1rem',
-                    color: '#ff6b6b',
-                    textShadow: '0 0 10px rgba(255, 107, 107, 0.5)'
-                  }}>
-                    📊 Track Progress
-                  </h3>
-                  <p style={{
-                    color: '#e0e0e0',
-                    textShadow: '0 0 5px rgba(255, 255, 255, 0.3)'
-                  }}>
+                <div className="home-feature-card">
+                  <h3>📊 Track Progress</h3>
+                  <p>
                     Monitor your improvement with detailed statistics, levels, and achievement tracking.
                   </p>
                 </div>
               </div>
-
-              <div style={{
-                marginTop: '3rem',
-                padding: '2rem',
-                background: 'rgba(26, 26, 46, 0.9)',
-                backdropFilter: 'blur(20px)',
-                border: '2px solid #00ffff',
-                borderRadius: '12px',
-                boxShadow: '0 0 20px rgba(0, 255, 255, 0.3)'
-              }}>
-                <h2 style={{
-                  color: '#ffffff',
-                  marginBottom: '1rem',
-                  textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'
-                }}>
-                  How It Works
-                </h2>
-                <ol style={{
-                  textAlign: 'left',
-                  display: 'inline-block',
-                  color: '#e0e0e0',
-                  lineHeight: '1.8',
-                  textShadow: '0 0 5px rgba(255, 255, 255, 0.3)'
-                }}>
+              <div className="home-how-it-works">
+                <h2>How It Works</h2>
+                <ol>
                   <li><strong>Choose a conversation:</strong> Select from various topics and difficulty levels</li>
                   <li><strong>Listen carefully:</strong> Play the audio and focus on pronunciation and intonation</li>
                   <li><strong>Type what you hear:</strong> Practice spelling while reinforcing listening skills</li>
@@ -404,30 +266,10 @@ export default function MainApp({ session }) {
                   <li><strong>Track your journey:</strong> View detailed statistics in your profile</li>
                 </ol>
               </div>
-
-              <div style={{ marginTop: '3rem' }}>
+              <div>
                 <button
                   onClick={() => setActiveView(VIEWS.CONVERSATIONS)}
-                  style={{
-                    background: 'linear-gradient(45deg, #ff6b6b, #ffa726)',
-                    color: '#ffffff',
-                    border: '2px solid #ff6b6b',
-                    padding: '1rem 2rem',
-                    fontSize: '1.2rem',
-                    borderRadius: '8px',
-                    cursor: 'pointer',
-                    boxShadow: '0 0 20px rgba(255, 107, 107, 0.6)',
-                    transition: 'all 0.3s ease',
-                    textShadow: '0 0 5px rgba(255, 255, 255, 0.5)'
-                  }}
-                  onMouseOver={(e) => {
-                    e.target.style.transform = 'translateY(-2px)';
-                    e.target.style.boxShadow = '0 0 30px rgba(255, 107, 107, 0.8)';
-                  }}
-                  onMouseOut={(e) => {
-                    e.target.style.transform = 'translateY(0)';
-                    e.target.style.boxShadow = '0 0 20px rgba(255, 107, 107, 0.6)';
-                  }}
+                  className="home-start-button"
                 >
                   🚀 Start Learning Now
                 </button>

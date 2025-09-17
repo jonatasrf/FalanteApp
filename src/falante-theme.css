@@ -289,13 +289,8 @@
 
   .categories-header {
     padding: 0.5rem 1rem;
-    flex-wrap: wrap;
-    justify-content: center; /* Centraliza itens quando quebram */
-  }
-
-  .categories-header .logo,
-  .categories-header .user-menu {
-    margin-bottom: 0.5rem; /* Adiciona margem inferior para separar quando quebra */
+    /* flex-wrap: wrap; Removido para manter em uma linha */
+    justify-content: space-between; /* Mantém o espaçamento como em telas grandes */
   }
 
   .logo {
@@ -304,6 +299,10 @@
 
   .user-menu-button {
     padding: 0.4rem;
+  }
+
+  .category-label { /* Esconde o texto do label em telas menores */
+    display: none;
   }
 }
 
@@ -320,15 +319,15 @@
 
   .categories-header {
     padding: 0.5rem;
-    flex-direction: column;
-    align-items: stretch;
+    /* flex-direction: column; Removido para manter em uma linha */
+    align-items: center; /* Alinha ao centro verticalmente */
   }
 
   .categories-buttons-container {
     justify-content: center;
     gap: 0.5rem;
     margin: 0.5rem 0;
-    flex-wrap: wrap; /* Permite que os botões quebrem para a próxima linha */
+    /* flex-wrap: wrap; Removido para manter em uma linha */
   }
 
   .logo {

@@ -3,11 +3,27 @@
   <head>
     <meta charset="utf-8">
     <title>Redirecting...</title>
-    <script>
-      sessionStorage.redirect = location.href;
+    <script type="text/javascript">
+      // Single Page Apps for GitHub Pages
+      // MIT License
+      // https://github.com/rafgraph/spa-github-pages
+      // This script takes the current url and converts the path and query
+      // string into just the hash fragment, then redirects to index.html
+      // with that hash fragment.
+      (function(){
+        var redirect = sessionStorage.getItem('redirect');
+        // If redirect is set, then we were redirected to 404.html
+        if (redirect) {
+          sessionStorage.removeItem('redirect');
+          window.location.replace(redirect);
+        } else {
+          // If not redirected, then this is a direct 404 access
+          // We can optionally redirect to the base URL or show a custom 404 message
+          // For now, let's redirect to the base URL as a fallback
+          window.location.replace('/FalanteApp/');
+        }
+      })();
     </script>
-    <meta http-equiv="refresh" content="0;URL=/FalanteApp/">
-    <link rel="canonical" href="/FalanteApp/">
   </head>
   <body>
     If you are not redirected automatically, follow this <a href="/FalanteApp/">link</a>.

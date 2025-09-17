@@ -35,35 +35,7 @@ export default function MainApp({ session }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredConversations, setFilteredConversations] = useState([]);
 
-  // Handle Supabase auth callback redirect
-  useEffect(() => {
-    const handleAuthCallback = async () => {
-      // Check if we're on the auth callback path or have auth tokens in hash
-      const isCallbackPath = window.location.pathname === '/auth/callback';
-      const hasAuthTokens = window.location.hash.includes('access_token') ||
-                           window.location.search.includes('code=');
-
-      if (isCallbackPath || hasAuthTokens) {
-        try {
-          // Supabase will automatically handle the session from the URL
-          const { data: { session }, error } = await supabase.auth.getSession();
-
-          if (error) {
-            console.error('Auth callback error:', error);
-          } else if (session) {
-            console.log('✅ Auth callback successful, user logged in');
-            setActiveView(VIEWS.HOME);
-            // Clean up the URL
-            window.history.replaceState({}, document.title, window.location.origin + window.location.pathname);
-          }
-        } catch (error) {
-          console.error('❌ Error handling auth callback:', error);
-        }
-      }
-    };
-
-    handleAuthCallback();
-  }, []);
+  
 
   // Redirect to home when user logs in
   useEffect(() => {

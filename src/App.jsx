@@ -28,6 +28,17 @@ function App() {
     } = supabase.auth.onAuthStateChange((_event, session) => {
       console.log('App.jsx: onAuthStateChange event:', _event, 'session:', session);
       setSession(session);
+
+      // Clean up the URL after successful authentication
+      if (session && (_event === 'SIGNED_IN' || _event === 'INITIAL_SESSION')) {
+        const currentPath = window.location.pathname;
+        const basePath = import.meta.env.BASE_URL; // Get base path from Vite config
+
+        // Check if the current path is the auth callback path
+        if (currentPath.includes(`${basePath}auth/callback`)) {
+          window.history.replaceState({}, document.title, window.location.origin + basePath);
+        }
+      }
     });
 
     return () => subscription.unsubscribe();

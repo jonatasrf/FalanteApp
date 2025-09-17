@@ -19,7 +19,7 @@ export default function ConversationListenType({ conversation, onConversationCom
 
     const textFieldRef = useRef(null);
 
-    const { speak } = useTts();
+    const { speak, preloadMultipleAudios, loadingProgress } = useTts();
     const { incrementCorrectSentences, resetStreak, updateConversationProgress, conversationProgress } = useUserProgress();
 
     const currentPhrase = conversation.phrases[currentPhraseIndex];
@@ -281,6 +281,20 @@ export default function ConversationListenType({ conversation, onConversationCom
             }
         }
     };
+
+    // Pré-carregar áudios quando o componente monta
+    useEffect(() => {
+        if (conversation?.phrases?.length > 0) {
+            const audioPaths = conversation.phrases
+                .map(phrase => phrase.audioPath)
+                .filter(Boolean);
+
+            if (audioPaths.length > 0) {
+                console.log(`🎵 Pré-carregando ${audioPaths.length} áudios da conversa...`);
+                preloadMultipleAudios(audioPaths, 2); // Carregar 2 por vez para não sobrecarregar
+            }
+        }
+    }, [conversation.id, conversation.phrases, preloadMultipleAudios]);
 
     // Carregar progresso salvo quando o componente monta
     useEffect(() => {
@@ -588,6 +602,28 @@ export default function ConversationListenType({ conversation, onConversationCom
                         {Math.round(((currentPhraseIndex + 1) / conversation.phrases.length) * 100)}% Complete
                     </Typography>
                 </Box>
+
+                {/* Barra de progresso de carregamento de áudio */}
+                {loadingProgress > 0 && loadingProgress < 100 && (
+                    <Box sx={{ mb: 2 }}>
+                        <Typography variant="body2" sx={{ color: '#00ffff', mb: 1 }}>
+                            🔊 Carregando áudio... {loadingProgress}%
+                        </Typography>
+                        <LinearProgress
+                            variant="determinate"
+                            value={loadingProgress}
+                            sx={{
+                                height: 4,
+                                borderRadius: 2,
+                                backgroundColor: 'rgba(0, 255, 255, 0.1)',
+                                '& .MuiLinearProgress-bar': {
+                                    backgroundColor: '#00ffff',
+                                    borderRadius: 2,
+                                }
+                            }}
+                        />
+                    </Box>
+                )}
 
                 <Box sx={{
                     ...getFeedbackSx(),

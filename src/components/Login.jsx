@@ -116,14 +116,14 @@ export default function Login() {
     const handleGoogleLogin = async () => {
         setLoading(true);
         try {
-            const currentOrigin = window.location.origin;
-            console.log('🌐 Current Origin:', currentOrigin);
-            console.log('🔗 Redirect URL will be:', `${currentOrigin}/auth/callback`);
+            const redirectTo = `${window.location.origin}${import.meta.env.BASE_URL}auth/callback`;
+            console.log('🌐 Current Origin:', window.location.origin);
+            console.log('🔗 Redirect URL will be:', redirectTo);
 
             const { error } = await supabase.auth.signInWithOAuth({
                 provider: 'google',
                 options: {
-                    redirectTo: `${currentOrigin}/auth/callback`
+                    redirectTo: redirectTo
                 }
             });
             if (error) throw error;

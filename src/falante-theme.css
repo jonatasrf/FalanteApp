@@ -290,6 +290,12 @@
   .categories-header {
     padding: 0.5rem 1rem;
     flex-wrap: wrap;
+    justify-content: center; /* Centraliza itens quando quebram */
+  }
+
+  .categories-header .logo,
+  .categories-header .user-menu {
+    margin-bottom: 0.5rem; /* Adiciona margem inferior para separar quando quebra */
   }
 
   .logo {
@@ -322,6 +328,7 @@
     justify-content: center;
     gap: 0.5rem;
     margin: 0.5rem 0;
+    flex-wrap: wrap; /* Permite que os botões quebrem para a próxima linha */
   }
 
   .logo {

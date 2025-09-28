@@ -116,7 +116,7 @@ export default function Login() {
     const handleGoogleLogin = async () => {
         setLoading(true);
         try {
-            const redirectTo = `${window.location.origin}${import.meta.env.BASE_URL}auth/callback`;
+            const redirectTo = `${window.location.origin}${import.meta.env.BASE_URL}`;
             console.log('🌐 Current Origin:', window.location.origin);
             console.log('🔗 Redirect URL will be:', redirectTo);
 

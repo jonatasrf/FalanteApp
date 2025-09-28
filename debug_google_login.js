@@ -6,8 +6,10 @@ console.log('========================');
 
 // 1. Verificar URL atual
 const currentOrigin = window.location.origin;
+const baseUrl = import.meta.env.BASE_URL || '/';
 console.log('🌐 Current Origin:', currentOrigin);
-console.log('🔗 Expected Redirect URL:', `${currentOrigin}/auth/callback`);
+console.log('🔗 Base URL:', baseUrl);
+console.log('🔗 Expected Redirect URL:', `${currentOrigin}${baseUrl}`);
 
 // 2. Verificar se estamos na página correta
 console.log('📍 Current URL:', window.location.href);
@@ -26,7 +28,8 @@ window.testGoogleLogin = function() {
 
     // Simular o que o código faz
     const testOrigin = window.location.origin;
-    const testRedirectUrl = `${testOrigin}/auth/callback`;
+    const testBaseUrl = import.meta.env.BASE_URL || '/';
+    const testRedirectUrl = `${testOrigin}${testBaseUrl}`;
 
     console.log('📤 Will redirect to:', testRedirectUrl);
 
@@ -39,6 +42,7 @@ window.testGoogleLogin = function() {
 
     return {
         origin: testOrigin,
+        baseUrl: testBaseUrl,
         redirectUrl: testRedirectUrl,
         isLocalhost: testOrigin.includes('localhost')
     };
@@ -55,7 +59,9 @@ console.log('5. Save and try again');
 console.log('');
 console.log('🎯 Example URLs to add in Google Cloud Console:');
 console.log('- Authorized JavaScript origins: http://localhost:5173');
-console.log('- Authorized redirect URIs: http://localhost:5173/auth/callback');
+console.log('- Authorized redirect URIs: http://localhost:5173/FalanteApp/');
+console.log('');
+console.log('For production, replace localhost:5173 with your actual domain');
 console.log('');
 console.log('🔧 If still not working, check:');
 console.log('- Supabase Dashboard → Authentication → Providers → Google');

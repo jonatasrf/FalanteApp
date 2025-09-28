@@ -54,84 +54,86 @@ const darkTheme = createTheme({
   },
 });
 
-// Tema claro inspirado no Airbnb
+// Tema claro moderno
 const lightTheme = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: '#FF385C', // Vermelho Airbnb
-      light: '#FF5A5F',
-      dark: '#E31B23',
+      main: '#1976d2', // Azul Material-UI
+      light: '#42a5f5',
+      dark: '#1565c0',
     },
     secondary: {
-      main: '#008489', // Verde Airbnb
-      light: '#00A699',
-      dark: '#007A87',
+      main: '#dc004e', // Rosa Material-UI
+      light: '#ff5983',
+      dark: '#9a0036',
     },
     background: {
-      default: '#FFFFFF',
-      paper: '#FFFFFF',
+      default: '#fafafa',
+      paper: '#ffffff',
     },
     text: {
-      primary: '#484848',
-      secondary: '#767676',
+      primary: '#212121',
+      secondary: '#757575',
     },
     grey: {
-      50: '#F7F7F7',
-      100: '#EBEBEB',
-      200: '#DDDDDD',
-      300: '#CCCCCC',
-      400: '#999999',
-      500: '#767676',
-      600: '#484848',
-      700: '#222222',
+      50: '#fafafa',
+      100: '#f5f5f5',
+      200: '#eeeeee',
+      300: '#e0e0e0',
+      400: '#bdbdbd',
+      500: '#9e9e9e',
+      600: '#757575',
+      700: '#616161',
+      800: '#424242',
+      900: '#212121',
     },
   },
   typography: {
-    fontFamily: '"Circular", "Roboto", "Helvetica", "Arial", sans-serif',
+    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
     h1: {
       fontSize: '2.5rem',
-      fontWeight: 800,
-      color: '#484848',
+      fontWeight: 700,
+      color: '#212121',
     },
     h2: {
       fontSize: '2rem',
-      fontWeight: 700,
-      color: '#484848',
+      fontWeight: 600,
+      color: '#212121',
     },
     h3: {
       fontSize: '1.5rem',
-      fontWeight: 600,
-      color: '#484848',
+      fontWeight: 500,
+      color: '#212121',
     },
     h4: {
       fontSize: '1.25rem',
-      fontWeight: 600,
-      color: '#484848',
+      fontWeight: 500,
+      color: '#212121',
     },
     h5: {
       fontSize: '1.125rem',
-      fontWeight: 600,
-      color: '#484848',
+      fontWeight: 500,
+      color: '#212121',
     },
     h6: {
       fontSize: '1rem',
-      fontWeight: 600,
-      color: '#484848',
+      fontWeight: 500,
+      color: '#212121',
     },
     body1: {
       fontSize: '1rem',
       lineHeight: 1.5,
-      color: '#484848',
+      color: '#212121',
     },
     body2: {
       fontSize: '0.875rem',
       lineHeight: 1.43,
-      color: '#767676',
+      color: '#757575',
     },
     button: {
       textTransform: 'none',
-      fontWeight: 600,
+      fontWeight: 500,
     },
   },
   shape: {
@@ -142,7 +144,7 @@ const lightTheme = createTheme({
       styleOverrides: {
         root: {
           textTransform: 'none',
-          fontWeight: 600,
+          fontWeight: 500,
           borderRadius: 8,
           padding: '12px 24px',
           boxShadow: 'none',
@@ -151,18 +153,18 @@ const lightTheme = createTheme({
           },
         },
         contained: {
-          backgroundColor: '#FF385C',
-          color: '#FFFFFF',
+          backgroundColor: '#1976d2',
+          color: '#ffffff',
           '&:hover': {
-            backgroundColor: '#E31B23',
+            backgroundColor: '#1565c0',
           },
         },
         outlined: {
-          borderColor: '#DDDDDD',
-          color: '#484848',
+          borderColor: '#e0e0e0',
+          color: '#212121',
           '&:hover': {
-            backgroundColor: '#F7F7F7',
-            borderColor: '#CCCCCC',
+            backgroundColor: '#f5f5f5',
+            borderColor: '#bdbdbd',
           },
         },
       },
@@ -172,7 +174,7 @@ const lightTheme = createTheme({
         root: {
           borderRadius: 12,
           boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-          border: '1px solid #EBEBEB',
+          border: '1px solid #e0e0e0',
           '&:hover': {
             boxShadow: '0 4px 16px rgba(0, 0, 0, 0.15)',
           },
@@ -189,8 +191,8 @@ const lightTheme = createTheme({
     MuiAppBar: {
       styleOverrides: {
         root: {
-          backgroundColor: '#FFFFFF',
-          color: '#484848',
+          backgroundColor: '#ffffff',
+          color: '#212121',
           boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
         },
       },
@@ -200,15 +202,15 @@ const lightTheme = createTheme({
         root: {
           '& .MuiOutlinedInput-root': {
             borderRadius: 8,
-            backgroundColor: '#FFFFFF',
+            backgroundColor: '#ffffff',
             '& fieldset': {
-              borderColor: '#DDDDDD',
+              borderColor: '#e0e0e0',
             },
             '&:hover fieldset': {
-              borderColor: '#CCCCCC',
+              borderColor: '#bdbdbd',
             },
             '&.Mui-focused fieldset': {
-              borderColor: '#FF385C',
+              borderColor: '#1976d2',
             },
           },
         },

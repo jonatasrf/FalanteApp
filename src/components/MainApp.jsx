@@ -235,7 +235,7 @@ export default function MainApp({ session }) {
                   mb: 2,
                   background: (theme) => theme.palette.mode === 'dark'
                     ? 'linear-gradient(45deg, #00ffff, #ff6b6b)'
-                    : 'linear-gradient(45deg, #FF385C, #008489)',
+                    : 'linear-gradient(45deg, #1976d2, #dc004e)',
                   backgroundClip: 'text',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
@@ -330,7 +330,7 @@ export default function MainApp({ session }) {
                       <Typography sx={{
                         mr: 2,
                         fontWeight: 'bold',
-                        color: (theme) => theme.palette.mode === 'dark' ? '#00ffff' : '#FF385C',
+                        color: (theme) => theme.palette.primary.main,
                         minWidth: '24px'
                       }}>
                         {index + 1}.
@@ -353,10 +353,10 @@ export default function MainApp({ session }) {
                   fontSize: '1.25rem',
                   fontWeight: 600,
                   borderRadius: 3,
-                  backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#00ffff' : '#FF385C',
-                  color: (theme) => theme.palette.mode === 'dark' ? '#000' : '#FFF',
+                  backgroundColor: (theme) => theme.palette.primary.main,
+                  color: (theme) => theme.palette.primary.contrastText,
                   '&:hover': {
-                    backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#00cccc' : '#E31B23',
+                    backgroundColor: (theme) => theme.palette.primary.dark,
                     transform: 'translateY(-2px)',
                     boxShadow: '0 6px 20px rgba(0, 0, 0, 0.2)'
                   },

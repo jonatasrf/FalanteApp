@@ -126,7 +126,7 @@ export default function SettingsPage() {
                                                     Theme Mode
                                                 </Typography>
                                                 <Typography variant="body2" sx={{ opacity: 0.8 }}>
-                                                    {isDarkMode ? 'Dark theme (Falante)' : 'Light theme (Airbnb style)'}
+                                                    {isDarkMode ? 'Dark theme (Falante)' : 'Light theme (Modern)'}
                                                 </Typography>
                                             </Box>
                                         </Box>

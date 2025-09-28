@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Box, Typography, Card, Button } from '@mui/material';
 import { useUserProgress } from '../contexts/UserProgressContext';
 import { supabase } from '../supabaseClient';
 import ConversationListenType from './ConversationListenType';
@@ -192,62 +193,180 @@ export default function MainApp({ session }) {
     switch (activeView) {
       case VIEWS.HOME: {
         return (
-          <div className="home-container">
-            <div className="home-background"></div>
-            <div className="home-content">
-              <h1 className="home-title">
+          <Box sx={{
+            minHeight: '100vh',
+            background: (theme) => theme.palette.mode === 'dark'
+              ? 'linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)'
+              : 'linear-gradient(135deg, #FFFFFF 0%, #F7F7F7 50%, #EBEBEB 100%)',
+            position: 'relative',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: (theme) => theme.palette.mode === 'dark'
+                ? `
+                  radial-gradient(circle at 20% 80%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 20%, rgba(255, 107, 107, 0.1) 0%, transparent 50%)
+                `
+                : `
+                  radial-gradient(circle at 20% 80%, rgba(255, 107, 107, 0.05) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 20%, rgba(0, 168, 168, 0.05) 0%, transparent 50%)
+                `,
+              pointerEvents: 'none'
+            }
+          }}>
+            <Box sx={{
+              position: 'relative',
+              zIndex: 1,
+              maxWidth: 1200,
+              mx: 'auto',
+              px: 3,
+              py: 8,
+              textAlign: 'center'
+            }}>
+              <Typography
+                variant="h1"
+                sx={{
+                  fontSize: { xs: '2.5rem', md: '4rem' },
+                  fontWeight: 800,
+                  mb: 2,
+                  background: (theme) => theme.palette.mode === 'dark'
+                    ? 'linear-gradient(45deg, #00ffff, #ff6b6b)'
+                    : 'linear-gradient(45deg, #FF385C, #008489)',
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  textShadow: (theme) => theme.palette.mode === 'dark'
+                    ? '0 0 20px rgba(0, 255, 255, 0.8), 0 0 40px rgba(0, 255, 255, 0.4)'
+                    : 'none'
+                }}
+              >
                 Welcome to Falante
-              </h1>
-              <p className="home-subtitle">
+              </Typography>
+
+              <Typography
+                variant="h5"
+                sx={{
+                  mb: 6,
+                  color: (theme) => theme.palette.mode === 'dark' ? '#cccccc' : '#767676',
+                  fontSize: { xs: '1.25rem', md: '1.5rem' },
+                  maxWidth: 600,
+                  mx: 'auto'
+                }}
+              >
                 Master English conversation skills through interactive learning
-              </p>
-              <div className="home-features">
-                <div className="home-feature-card">
-                  <h3>🎧 Listen & Learn</h3>
-                  <p>
-                    Practice your listening skills with native speaker audio and learn natural conversation patterns.
-                  </p>
-                </div>
-                <div className="home-feature-card">
-                  <h3>✏️ Interactive Practice</h3>
-                  <p>
-                    Type what you hear and get instant feedback to improve your spelling and comprehension.
-                  </p>
-                </div>
-                <div className="home-feature-card">
-                  <h3>🧠 Knowledge Tests</h3>
-                  <p>
-                    Test your understanding with quizzes that reinforce what you've learned in each conversation.
-                  </p>
-                </div>
-                <div className="home-feature-card">
-                  <h3>📊 Track Progress</h3>
-                  <p>
-                    Monitor your improvement with detailed statistics, levels, and achievement tracking.
-                  </p>
-                </div>
-              </div>
-              <div className="home-how-it-works">
-                <h2>How It Works</h2>
-                <ol>
-                  <li><strong>Choose a conversation:</strong> Select from various topics and difficulty levels</li>
-                  <li><strong>Listen carefully:</strong> Play the audio and focus on pronunciation and intonation</li>
-                  <li><strong>Type what you hear:</strong> Practice spelling while reinforcing listening skills</li>
-                  <li><strong>Take the quiz:</strong> Test your comprehension with multiple-choice questions</li>
-                  <li><strong>Earn rewards:</strong> Gain diamonds and level up as you progress</li>
-                  <li><strong>Track your journey:</strong> View detailed statistics in your profile</li>
-                </ol>
-              </div>
-              <div>
-                <button
-                  onClick={() => setActiveView(VIEWS.CONVERSATIONS)}
-                  className="home-start-button"
-                >
-                  🚀 Start Learning Now
-                </button>
-              </div>
-            </div>
-          </div>
+              </Typography>
+
+              <Box sx={{
+                display: 'grid',
+                gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)', lg: 'repeat(4, 1fr)' },
+                gap: 3,
+                mb: 8
+              }}>
+                {[
+                  { icon: '🎧', title: 'Listen & Learn', desc: 'Practice your listening skills with native speaker audio and learn natural conversation patterns.' },
+                  { icon: '✏️', title: 'Interactive Practice', desc: 'Type what you hear and get instant feedback to improve your spelling and comprehension.' },
+                  { icon: '🧠', title: 'Knowledge Tests', desc: 'Test your understanding with quizzes that reinforce what you\'ve learned in each conversation.' },
+                  { icon: '📊', title: 'Track Progress', desc: 'Monitor your improvement with detailed statistics, levels, and achievement tracking.' }
+                ].map((feature, index) => (
+                  <Card key={index} sx={{
+                    p: 3,
+                    backgroundColor: (theme) => theme.palette.mode === 'dark'
+                      ? 'rgba(255, 255, 255, 0.05)'
+                      : 'rgba(255, 255, 255, 0.8)',
+                    border: (theme) => `1px solid ${theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.1)' : '#EBEBEB'}`,
+                    borderRadius: 3,
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      transform: 'translateY(-4px)',
+                      boxShadow: (theme) => theme.palette.mode === 'dark'
+                        ? '0 8px 25px rgba(0, 255, 255, 0.2)'
+                        : '0 8px 25px rgba(0, 0, 0, 0.1)'
+                    }
+                  }}>
+                    <Typography variant="h3" sx={{ mb: 2, fontSize: '2rem' }}>
+                      {feature.icon}
+                    </Typography>
+                    <Typography variant="h6" sx={{ mb: 1, fontWeight: 600 }}>
+                      {feature.title}
+                    </Typography>
+                    <Typography variant="body2" sx={{
+                      color: (theme) => theme.palette.mode === 'dark' ? '#cccccc' : '#767676'
+                    }}>
+                      {feature.desc}
+                    </Typography>
+                  </Card>
+                ))}
+              </Box>
+
+              <Box sx={{ mb: 8 }}>
+                <Typography variant="h3" sx={{ mb: 4, fontWeight: 700 }}>
+                  How It Works
+                </Typography>
+                <Box sx={{
+                  display: 'grid',
+                  gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' },
+                  gap: 3,
+                  textAlign: 'left',
+                  maxWidth: 800,
+                  mx: 'auto'
+                }}>
+                  {[
+                    'Choose a conversation: Select from various topics and difficulty levels',
+                    'Listen carefully: Play the audio and focus on pronunciation and intonation',
+                    'Type what you hear: Practice spelling while reinforcing listening skills',
+                    'Take the quiz: Test your comprehension with multiple-choice questions',
+                    'Earn rewards: Gain diamonds and level up as you progress',
+                    'Track your journey: View detailed statistics in your profile'
+                  ].map((step, index) => (
+                    <Box key={index} sx={{
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      mb: 2
+                    }}>
+                      <Typography sx={{
+                        mr: 2,
+                        fontWeight: 'bold',
+                        color: (theme) => theme.palette.mode === 'dark' ? '#00ffff' : '#FF385C',
+                        minWidth: '24px'
+                      }}>
+                        {index + 1}.
+                      </Typography>
+                      <Typography variant="body1">
+                        {step}
+                      </Typography>
+                    </Box>
+                  ))}
+                </Box>
+              </Box>
+
+              <Button
+                variant="contained"
+                size="large"
+                onClick={() => setActiveView(VIEWS.CONVERSATIONS)}
+                sx={{
+                  px: 6,
+                  py: 2,
+                  fontSize: '1.25rem',
+                  fontWeight: 600,
+                  borderRadius: 3,
+                  backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#00ffff' : '#FF385C',
+                  color: (theme) => theme.palette.mode === 'dark' ? '#000' : '#FFF',
+                  '&:hover': {
+                    backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#00cccc' : '#E31B23',
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 6px 20px rgba(0, 0, 0, 0.2)'
+                  },
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                🚀 Start Learning Now
+              </Button>
+            </Box>
+          </Box>
         );
       }
       case VIEWS.CONVERSATIONS: {

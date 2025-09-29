@@ -172,7 +172,7 @@ export default function ProgressPage() {
                                             {level}
                                         </Typography>
                                         <Typography variant="body2" sx={{ mb: 2, opacity: 0.9 }}>Current Level</Typography>
-                                        <Typography variant="caption" sx={{ fontSize: '0.7rem', opacity: 0.8, lineHeight: 1.2 }}>
+                                        <Typography variant="caption" sx={{ fontSize: '0.7rem', opacity: 0.95, lineHeight: 1.2, color: 'rgba(255,255,255,0.95)' }}>
                                             Earn levels by completing conversations. Each level requires more sentences to advance.
                                         </Typography>
                                     </CardContent>
@@ -292,7 +292,7 @@ export default function ProgressPage() {
                                             {correct_sentences_count}
                                         </Typography>
                                         <Typography variant="body2" sx={{ mb: 2, opacity: 0.9 }}>Correct Sentences</Typography>
-                                        <Typography variant="caption" sx={{ fontSize: '0.7rem', opacity: 0.8, lineHeight: 1.2 }}>
+                                        <Typography variant="caption" sx={{ fontSize: '0.7rem', opacity: 0.95, lineHeight: 1.2, color: 'rgba(255,255,255,0.95)' }}>
                                             Total sentences answered correctly. Every 100 correct sentences earns a diamond.
                                         </Typography>
                                     </CardContent>
@@ -356,7 +356,7 @@ export default function ProgressPage() {
                                             {progress?.max_streak || 0}
                                         </Typography>
                                         <Typography variant="body2" sx={{ mb: 2, opacity: 0.9 }}>Best Streak</Typography>
-                                        <Typography variant="caption" sx={{ fontSize: '0.7rem', opacity: 0.8, lineHeight: 1.2 }}>
+                                        <Typography variant="caption" sx={{ fontSize: '0.7rem', opacity: 0.95, lineHeight: 1.2, color: 'rgba(255,255,255,0.95)' }}>
                                             Your personal best! Maximum consecutive correct answers achieved.
                                         </Typography>
                                     </CardContent>
@@ -401,7 +401,7 @@ export default function ProgressPage() {
 
                                     if (orderedLevels.length === 0) {
                                         return (
-                                            <Typography variant="body2" sx={{ opacity: 0.8, textAlign: 'center', py: 4 }}>
+                                            <Typography variant="body2" sx={{ opacity: 0.95, textAlign: 'center', py: 4, color: 'rgba(255,255,255,0.95)' }}>
                                                 No conversations completed yet. Start practicing to see your progress chart!
                                             </Typography>
                                         );
@@ -447,7 +447,7 @@ export default function ProgressPage() {
                                 })()}
                             </Box>
 
-                            <Typography variant="body2" sx={{ opacity: 0.8, textAlign: 'center', mt: 2 }}>
+                            <Typography variant="body2" sx={{ opacity: 0.95, textAlign: 'center', mt: 2, color: 'rgba(255,255,255,0.95)' }}>
                                 Total conversations completed: {completedConversations}
                             </Typography>
                         </CardContent>
@@ -536,9 +536,11 @@ export default function ProgressPage() {
                                                             left: -25,
                                                             top: (100 - percentage) * chartHeight / 100 - 8,
                                                             fontSize: '0.6rem',
-                                                            opacity: 0.7,
+                                                            opacity: 0.9,
                                                             width: 20,
-                                                            textAlign: 'right'
+                                                            textAlign: 'right',
+                                                            color: 'white',
+                                                            fontWeight: 'bold'
                                                         }}
                                                     >
                                                         {Math.round(maxSentences * percentage / 100)}
@@ -626,10 +628,10 @@ export default function ProgressPage() {
 
                                             {/* Summary */}
                                             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                <Typography variant="body2" sx={{ opacity: 0.8 }}>
+                                                <Typography variant="body2" sx={{ opacity: 0.95, color: 'rgba(255,255,255,0.95)' }}>
                                                     Total this week: {simulatedData.reduce((sum, d) => sum + d.sentences, 0)} sentences
                                                 </Typography>
-                                                <Typography variant="body2" sx={{ opacity: 0.8 }}>
+                                                <Typography variant="body2" sx={{ opacity: 0.95, color: 'rgba(255,255,255,0.95)' }}>
                                                     Daily average: {Math.round(simulatedData.reduce((sum, d) => sum + d.sentences, 0) / 7)} sentences
                                                 </Typography>
                                             </Box>
@@ -638,7 +640,7 @@ export default function ProgressPage() {
                                 })()}
                             </Box>
 
-                            <Typography variant="body2" sx={{ opacity: 0.8, textAlign: 'center', mt: 2 }}>
+                            <Typography variant="body2" sx={{ opacity: 0.95, textAlign: 'center', mt: 2, color: 'rgba(255,255,255,0.95)' }}>
                                 Track your daily consistency! 📈 Keep the momentum going.
                             </Typography>
                         </CardContent>
@@ -767,7 +769,7 @@ export default function ProgressPage() {
                                 })()}
                             </Box>
 
-                            <Typography variant="body2" sx={{ opacity: 0.8, textAlign: 'center', mt: 2 }}>
+                            <Typography variant="body2" sx={{ opacity: 0.95, textAlign: 'center', mt: 2, color: 'rgba(255,255,255,0.95)' }}>
                                 Goals reset every Monday. Keep practicing to unlock rewards! 🎁
                             </Typography>
                         </CardContent>
@@ -790,7 +792,7 @@ export default function ProgressPage() {
                                 Conversation Progress
                             </Typography>
                             {loadingConversations ? (
-                                <Typography sx={{ opacity: 0.8 }}>Loading conversations...</Typography>
+                                <Typography sx={{ opacity: 0.95, color: 'rgba(255,255,255,0.95)' }}>Loading conversations...</Typography>
                             ) : errorConversations ? (
                                 <Typography color="error">Error loading conversations: {errorConversations}</Typography>
                             ) : (() => {
@@ -803,7 +805,7 @@ export default function ProgressPage() {
                                     .slice(0, 5);
 
                                 return completedConversations.length === 0 ? (
-                                    <Typography sx={{ opacity: 0.8 }}>No completed conversations yet.</Typography>
+                                    <Typography sx={{ opacity: 0.95, color: 'rgba(255,255,255,0.95)' }}>No completed conversations yet.</Typography>
                                 ) : (
                                     <Box sx={{
                                         maxHeight: completedConversations.length > 3 ? 300 : 'auto',

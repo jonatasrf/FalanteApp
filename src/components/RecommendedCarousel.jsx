@@ -121,20 +121,17 @@ export default function RecommendedCarousel({ conversations, onConversationStart
                 className="conversation-card-image"
               />
               <div className="conversation-card-star" style={{
-                background: 'rgba(0, 0, 0, 0.3)',
-                color: isCompleted ? '#FFD700' : '#CCCCCC',
-                border: 'none',
-                boxShadow: 'none',
+                color: isCompleted ? '#FFD700' : '#666666',
                 fontSize: '1.4rem',
-                fontWeight: 'normal',
+                fontWeight: 'bold',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 width: '28px',
                 height: '28px',
-                borderRadius: '50%'
+                textShadow: isCompleted ? '0 0 8px rgba(255, 215, 0, 0.5)' : 'none'
               }}>
-                ⭐
+                ★
               </div>
               <div className="conversation-card-content">
                 <h3>{conv.title}</h3>

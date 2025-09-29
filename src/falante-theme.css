@@ -221,12 +221,17 @@
 
 .main-content {
   padding: 2rem;
+  /* Header fixo - conteúdo inicia depois do header */
   margin-top: 140px; /* Espaço para CategoriesHeader (70px) + Header (70px) */
   background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
   min-height: 100vh;
-  /* Garantindo que o header fixo seja visível */
   position: relative;
   z-index: 1;
+}
+
+body {
+  margin: 0;
+  padding: 0;
 }
 
 .conversation-card {

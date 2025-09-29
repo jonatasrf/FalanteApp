@@ -168,10 +168,10 @@ export default function ProgressPage() {
                                         }}>
                                             <SchoolIcon sx={{ fontSize: 30, color: '#ffffff' }} />
                                         </Box>
-                                        <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
-                                            {level}
-                                        </Typography>
-                                        <Typography variant="body2" sx={{ mb: 2, opacity: 0.9 }}>Current Level</Typography>
+                        <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1, color: '#4A90E2' }}>
+                            {level}
+                        </Typography>
+                        <Typography variant="body2" sx={{ mb: 2, color: '#E8F4FD' }}>Current Level</Typography>
                                         <Typography variant="caption" sx={{ fontSize: '0.7rem', opacity: 0.95, lineHeight: 1.2, color: 'rgba(255,255,255,0.95)' }}>
                                             Earn levels by completing conversations. Each level requires more sentences to advance.
                                         </Typography>
@@ -379,7 +379,7 @@ export default function ProgressPage() {
                         <CardContent>
                             <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
                                 <EmojiEventsIcon sx={{ mr: 1, color: '#f39c12' }} />
-                                <Typography variant="h6">Sentences Completed by Level</Typography>
+                                <Typography variant="h6" sx={{ color: '#FFE4B5' }}>Sentences Completed by Level</Typography>
                             </Box>
 
                             {/* Simple Bar Chart */}

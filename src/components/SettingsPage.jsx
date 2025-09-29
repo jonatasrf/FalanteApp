@@ -176,6 +176,7 @@ export default function SettingsPage() {
                     onClose={() => setShowConfirmDialog(false)}
                     aria-labelledby="confirm-delete-title"
                     aria-describedby="confirm-delete-description"
+                    disableEnforceFocus={false}
                     PaperProps={{
                         sx: { borderRadius: 3 }
                     }}

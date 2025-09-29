@@ -332,7 +332,7 @@ export default function ProgressPage() {
                                             position: 'relative'
                                         }}>
                                             <TimelineIcon sx={{ fontSize: 30, color: '#ffffff' }} />
-                                            {(progress?.max_streak || 0) > 0 && (
+                                            {(max_streak || 0) > 0 && (
                                                 <Box sx={{
                                                     position: 'absolute',
                                                     top: -8,
@@ -353,7 +353,7 @@ export default function ProgressPage() {
                                             )}
                                         </Box>
                                         <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
-                                            {progress?.max_streak || 0}
+                                            {max_streak || 0}
                                         </Typography>
                                         <Typography variant="body2" sx={{ mb: 2, opacity: 0.9 }}>Best Streak</Typography>
                                         <Typography variant="caption" sx={{ fontSize: '0.7rem', opacity: 0.95, lineHeight: 1.2, color: 'rgba(255,255,255,0.95)' }}>

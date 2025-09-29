@@ -151,6 +151,13 @@ export default function MainApp({ session }) {
     setActiveView(VIEWS.CONVERSATIONS);
   };
 
+  const handleBackToConversations = () => {
+    // Sempre volta para listagem de conversas
+    setSelectedConversation(null);
+    setQuizReady(false);
+    setActiveView(VIEWS.CONVERSATIONS);
+  };
+
   const renderView = () => {
     if (activeView === VIEWS.LOGIN) {
         return <Login />;
@@ -414,18 +421,28 @@ export default function MainApp({ session }) {
           </div>
         );
       }
-      case VIEWS.CONVERSATION_LISTEN_TYPE:
+      case VIEWS.CONVERSATION_LISTEN_TYPE: {
         if (!selectedConversation) return <p>No conversation selected.</p>;
+
+        // Verificar se a conversa já foi totalmente completa (inclusive quiz)
+        const conversationProgress = _conversationProgress[selectedConversation.id];
+        const isFullyCompleted = conversationProgress && conversationProgress.quiz_completed;
+
         return (
           <>
-            <ConversationListenType conversation={selectedConversation} onConversationComplete={handleConversationComplete} />
-            {quizReady && (
+            <ConversationListenType
+              conversation={selectedConversation}
+              onConversationComplete={handleConversationComplete}
+              onBackToConversations={handleBackToConversations}
+            />
+            {quizReady && !isFullyCompleted && (
               <div style={{ marginTop: '2rem' }}>
                 <ConversationQuiz conversation={selectedConversation} onQuizComplete={handleQuizComplete} />
               </div>
             )}
           </>
         );
+      }
       default:
         return <p>Select a view</p>;
     }

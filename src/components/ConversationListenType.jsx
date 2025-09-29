@@ -9,7 +9,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
-export default function ConversationListenType({ conversation, onConversationComplete }) {
+export default function ConversationListenType({ conversation, onConversationComplete, onBackToConversations }) {
     const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
     const [userInput, setUserInput] = useState('');
     const [feedback, setFeedback] = useState({ message: 'Listen to the phrase first.', type: 'default', severity: 'info' });
@@ -640,7 +640,7 @@ export default function ConversationListenType({ conversation, onConversationCom
                         </Button>
                         <Button
                             variant="outlined"
-                            onClick={() => onConversationComplete(conversation)}
+                            onClick={() => onBackToConversations && onBackToConversations()}
                             sx={{
                                 px: 3,
                                 py: 1.5,

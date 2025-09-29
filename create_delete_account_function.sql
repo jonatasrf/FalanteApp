@@ -1,82 +1,114 @@
 -- SQL PARA CRIAR FUNÇÃO DE DELEÇÃO DE CONTA NO SUPABASE
--- Execute este comando no SQL Editor do Supabase Dashboard
+-- Execute estes comandos no SQL Editor do Supabase Dashboard
 
--- 1. Criar função para deletar conta permanentemente
-CREATE OR REPLACE FUNCTION delete_user_account(user_id UUID)
-RETURNS BOOLEAN
-LANGUAGE plpgsql
-SECURITY DEFINER
-AS $$
-DECLARE
-    user_exists BOOLEAN;
-BEGIN
-    -- Verificar se o usuário existe
-    SELECT EXISTS(SELECT 1 FROM auth.users WHERE id = user_id) INTO user_exists;
+-- 1. Primeiro, crie uma Edge Function para deletar contas
+-- Vá para Supabase Dashboard → Edge Functions
+-- Crie uma função chamada "delete-account"
+-- Cole este código no arquivo index.ts da função:
 
-    IF NOT user_exists THEN
-        RAISE EXCEPTION 'User not found';
-    END IF;
+```typescript
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
-    -- Deletar dados do usuário da tabela user_progress
-    DELETE FROM user_progress WHERE user_id = user_id;
+serve(async (req) => {
+  // Verificar se a requisição é POST
+  if (req.method !== 'POST') {
+    return new Response(JSON.stringify({ error: 'Method not allowed' }), { status: 405 })
+  }
 
-    -- Deletar a conta do usuário (requer service key ou admin access)
-    -- Nota: Esta operação pode não funcionar do frontend
-    -- DELETE FROM auth.users WHERE id = user_id;
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  }
 
-    RETURN TRUE;
-EXCEPTION
-    WHEN OTHERS THEN
-        RAISE EXCEPTION 'Error deleting user account: %', SQLERRM;
-END;
-$$;
+  // Verificar autenticação
+  const authHeader = req.headers.get('Authorization')
+  if (!authHeader) {
+    return new Response(JSON.stringify({ error: 'No authorization header' }), { status: 401, headers: corsHeaders })
+  }
 
--- 2. Conceder permissões para usuários autenticados executarem a função
-GRANT EXECUTE ON FUNCTION delete_user_account(UUID) TO authenticated;
+  const supabaseClient = createClient(
+    Deno.env.get('SUPABASE_URL') ?? '',
+    Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+    {
+      global: { headers: { Authorization: authHeader } },
+    }
+  )
 
--- 3. Testar a função (substitua pelo ID real do usuário)
--- SELECT delete_user_account('user-id-here');
+  // Obter usuário atual
+  const { data: { user }, error: getUserError } = await supabaseClient.auth.getUser()
+  if (getUserError || !user) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: corsHeaders })
+  }
 
--- 4. Verificar se a função foi criada
-SELECT
-    proname as function_name,
-    pg_get_function_identity_arguments(oid) as arguments
-FROM pg_proc
-WHERE proname = 'delete_user_account';
+  const supabaseAdmin = createClient(
+    Deno.env.get('SUPABASE_URL') ?? '',
+    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
+    {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false
+      }
+    }
+  )
 
--- 5. IMPORTANTE: Para deletar contas permanentemente, você precisa:
---    a) Usar a service key do Supabase (não a anon key)
---    b) Ou configurar uma Edge Function no Supabase
---    c) Ou deletar manualmente pelo Supabase Dashboard
+  try {
+    // 1. Deletar dados do usuário da tabela user_progress
+    const { error: progressError } = await supabaseAdmin
+      .from('user_progress')
+      .delete()
+      .eq('user_id', user.id)
 
--- 6. ALTERNATIVA RECOMENDADA: Criar uma Edge Function
--- Crie um arquivo na pasta supabase/functions/delete-account/index.ts:
+    if (progressError) {
+      console.error('Error deleting user progress:', progressError)
+      return new Response(JSON.stringify({ error: 'Failed to delete user data' }), { status: 500, headers: corsHeaders })
+    }
 
--- import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
--- import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+    // 2. Deletar conta do usuário
+    const { error: deleteError } = await supabaseAdmin.auth.admin.deleteUser(user.id)
 
--- serve(async (req) => {
---   const { userId } = await req.json()
+    if (deleteError) {
+      console.error('Error deleting user account:', deleteError)
+      return new Response(JSON.stringify({ error: 'Failed to delete account' }), { status: 500, headers: corsHeaders })
+    }
 
---   const supabaseAdmin = createClient(
---     Deno.env.get('SUPABASE_URL') ?? '',
---     Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
---   )
+    return new Response(JSON.stringify({
+      success: true,
+      message: 'Account and all data permanently deleted'
+    }), { status: 200, headers: corsHeaders })
 
---   // Deletar dados do usuário
---   await supabaseAdmin.from('user_progress').delete().eq('user_id', userId)
+  } catch (error) {
+    console.error('Unexpected error:', error)
+    return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500, headers: corsHeaders })
+  }
+})
+```
 
---   // Deletar conta
---   const { error } = await supabaseAdmin.auth.admin.deleteUser(userId)
+-- 2. No frontend, use a Edge Function para deletar conta
+-- Atualize o código em src/components/SettingsPage.jsx para:
 
---   if (error) {
---     return new Response(JSON.stringify({ error: error.message }), { status: 400 })
---   }
-
---   return new Response(JSON.stringify({ success: true }), { status: 200 })
--- })
-
--- 7. Para usar a Edge Function no frontend:
--- const { data, error } = await supabase.functions.invoke('delete-account', {
---   body: { userId: session.user.id }
--- });
+-- // Substitua a função confirmDeleteAccount por:
+-- const confirmDeleteAccount = async () => {
+--     setShowConfirmDialog(false);
+--
+--     try {
+--         const { data, error } = await supabase.functions.invoke('delete-account')
+--
+--         if (error) {
+--             showToast(`Error deleting account: ${error.message}`, 'error');
+--             return;
+--         }
+--
+--         // Sign out após deletar
+--         await supabase.auth.signOut();
+--
+--         // Redirecionar para HOME
+--         window.location.href = '/';
+--
+--         showToast('✅ Account and all data permanently deleted!', 'success');
+--
+--     } catch (error) {
+--         console.error('Error during account deletion:', error);
+--         showToast('❌ Error deleting account. Please try again or contact support.', 'error');
+--     }
+-- };

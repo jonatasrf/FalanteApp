@@ -16,47 +16,22 @@ export default function SettingsPage() {
         setShowConfirmDialog(false);
 
         try {
-            // Obter sessão atual
-            const { data: { session } } = await supabase.auth.getSession();
-            if (!session?.user?.id) {
-                showToast('No active session found.', 'error');
+            // Usar Edge Function para deletar conta completamente
+            const { error } = await supabase.functions.invoke('delete-account');
+
+            if (error) {
+                console.error('Edge Function error:', error);
+                showToast(`Error deleting account: ${error.message}`, 'error');
                 return;
             }
 
-            // 1. Primeiro, deletar os dados do usuário da tabela user_progress
-            const { error: progressError } = await supabase
-                .from('user_progress')
-                .delete()
-                .eq('user_id', session.user.id);
-
-            if (progressError) {
-                console.error('Error deleting user progress:', progressError);
-                showToast('Error deleting user data. Please try again or contact support.', 'error');
-                return;
-            }
-
-            // 2. Tentar deletar a conta (isso pode não funcionar do frontend)
-            try {
-                const { error: accountError } = await supabase.rpc('delete_user_account', {
-                    user_id: session.user.id
-                });
-
-                if (accountError) {
-                    console.log('Account deletion requires admin access. User data deleted successfully.');
-                }
-            } catch {
-                console.log('RPC function not available. User data deleted successfully.');
-            }
-
-            // 3. Fazer sign out
+            // Sign out após deletar
             await supabase.auth.signOut();
 
-            // 4. Mostrar mensagem de sucesso
-            showToast('✅ Account deletion completed!\n\n' +
-                      '• Your progress data has been permanently deleted\n' +
-                      '• You have been signed out\n' +
-                      '• Your account will be fully removed (may take a few minutes)\n\n' +
-                      'Thank you for using Falante!', 'success');
+            // Redirecionar para página inicial
+            window.location.href = '/';
+
+            showToast('✅ Account and all data permanently deleted!', 'success');
 
         } catch (error) {
             console.error('Error during account deletion:', error);

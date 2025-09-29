@@ -55,8 +55,37 @@ export const UserProgressProvider = ({ children, session }) => {
                 if (mainData) {
                     setProgress({ ...mainData, isGuest: false });
                 } else {
-                    const { data: newProgress } = await supabase.from('user_progress').insert({ user_id: session.user.id }).select().single();
-                    if (newProgress) setProgress({ ...newProgress, isGuest: false });
+                    // Verificar se já existe um registro antes de inserir (evitar duplicatas)
+                    const { data: existing } = await supabase
+                        .from('user_progress')
+                        .select('*')
+                        .eq('user_id', session.user.id)
+                        .maybeSingle();
+
+                    if (existing) {
+                        setProgress({ ...existing, isGuest: false });
+                    } else {
+                        const { data: newProgress, error: insertError } = await supabase
+                            .from('user_progress')
+                            .insert({
+                                user_id: session.user.id,
+                                correct_sentences_count: 0,
+                                current_streak: 0,
+                                max_streak: 0,
+                                session_completed_count_listen: 0,
+                                last_level_up_count: 0,
+                                last_diamond_count: 0
+                            })
+                            .select()
+                            .single();
+
+                        if (insertError) {
+                            console.error('Error creating user progress:', insertError);
+                            showToast('Failed to create user profile.', 'error');
+                        } else if (newProgress) {
+                            setProgress({ ...newProgress, isGuest: false });
+                        }
+                    }
                 }
 
                 // Conversation progress is now stored in user_progress table as JSON

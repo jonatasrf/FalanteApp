@@ -4,8 +4,30 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { SampleNextArrow, SamplePrevArrow } from "./CarouselArrows";
 
-export default function ConversationCarousel({ title, conversations, onConversationStart, conversationProgress }) {
+export default function ConversationCarousel({ title, conversations, onConversationStart, conversationProgress, prioritizeIncomplete = false }) {
   const slider = useRef(null);
+
+  // Ordenar conversas: não completadas primeiro (se habilitado)
+  const sortedConversations = React.useMemo(() => {
+    if (!prioritizeIncomplete || !conversationProgress) {
+      return conversations;
+    }
+
+    return [...conversations].sort((a, b) => {
+      const progressA = conversationProgress[a.id];
+      const progressB = conversationProgress[b.id];
+      const isCompletedA = progressA && progressA.dialogue_completed;
+      const isCompletedB = progressB && progressB.dialogue_completed;
+
+      // Se um está completo e o outro não, o incompleto vem primeiro
+      if (isCompletedA && !isCompletedB) return 1;
+      if (!isCompletedA && isCompletedB) return -1;
+
+      // Se ambos têm o mesmo status, manter ordem original
+      return 0;
+    });
+  }, [conversations, conversationProgress, prioritizeIncomplete]);
+
   const settings = {
     dots: false,
     infinite: false,
@@ -80,7 +102,7 @@ export default function ConversationCarousel({ title, conversations, onConversat
         </div>
       </div>
       <Slider ref={slider} {...settings}>
-        {conversations.map((conv) => {
+        {sortedConversations.map((conv) => {
           const progress = conversationProgress && conversationProgress[conv.id];
           const isCompleted = progress && progress.dialogue_completed;
 

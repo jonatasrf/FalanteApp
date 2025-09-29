@@ -405,6 +405,64 @@
   overflow: visible;
 }
 
+.recommended-carousel {
+  margin: 3rem 0 2rem 0;
+  position: relative;
+  overflow: visible;
+}
+
+.recommended-carousel .carousel-header {
+  background: linear-gradient(135deg, rgba(255, 56, 92, 0.1) 0%, rgba(0, 132, 137, 0.1) 100%);
+  border: 2px solid #FF385C;
+  border-radius: 15px;
+  padding: 1rem 2rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 0 20px rgba(255, 56, 92, 0.3);
+}
+
+.recommended-carousel .carousel-header h2 {
+  color: #FF385C;
+  text-shadow: 0 0 10px rgba(255, 56, 92, 0.6);
+  margin-bottom: 0.5rem;
+}
+
+.recommended-card {
+  position: relative;
+  animation: recommendedPulse 2s ease-in-out infinite;
+}
+
+.recommended-card::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #FF385C, #008489, #FF385C, #008489);
+  background-size: 300% 300%;
+  border-radius: 14px;
+  z-index: -1;
+  animation: recommendedGlow 3s ease-in-out infinite;
+}
+
+@keyframes recommendedPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+@keyframes recommendedGlow {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
 .carousel-header {
   display: flex;
   justify-content: space-between;

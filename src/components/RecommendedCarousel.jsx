@@ -1,0 +1,158 @@
+import React, { useRef, useMemo } from "react";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { SampleNextArrow, SamplePrevArrow } from "./CarouselArrows";
+
+export default function RecommendedCarousel({ conversations, onConversationStart, conversationProgress, userLevel = 'A1' }) {
+  const slider = useRef(null);
+
+  // Filtrar apenas conversas não completadas
+  const incompleteConversations = useMemo(() => {
+    return conversations.filter(conv => {
+      const progress = conversationProgress && conversationProgress[conv.id];
+      return !progress || !progress.dialogue_completed;
+    });
+  }, [conversations, conversationProgress]);
+
+  // Sistema de recomendação baseado no nível do usuário
+  const recommendedConversations = useMemo(() => {
+    if (incompleteConversations.length === 0) return [];
+
+    // Definir ordem de prioridade de níveis
+    const levelOrder = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'C3'];
+    const currentLevelIndex = levelOrder.indexOf(userLevel);
+
+    // Filtrar conversas do nível atual e próximos níveis
+    const relevantLevels = levelOrder.slice(currentLevelIndex, currentLevelIndex + 2);
+
+    let recommendations = incompleteConversations.filter(conv =>
+      relevantLevels.includes(conv.level)
+    );
+
+    // Se não houver conversas dos níveis relevantes, incluir todas as não completadas
+    if (recommendations.length === 0) {
+      recommendations = incompleteConversations;
+    }
+
+    // Embaralhar para variar as recomendações
+    const shuffled = [...recommendations].sort(() => Math.random() - 0.5);
+
+    // Retornar no máximo 8 recomendações
+    return shuffled.slice(0, 8);
+  }, [incompleteConversations, userLevel]);
+
+  const settings = {
+    dots: false,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    initialSlide: 0,
+    centerMode: false,
+    centerPadding: '0px',
+    variableWidth: true,
+    responsive: [
+      {
+        breakpoint: 1200,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+          centerMode: false,
+          centerPadding: '0px',
+          variableWidth: true,
+        }
+      },
+      {
+        breakpoint: 992,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          centerMode: false,
+          centerPadding: '0px',
+          variableWidth: true,
+        }
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          centerMode: false,
+          centerPadding: '0px',
+          variableWidth: true,
+        }
+      }
+    ]
+  };
+
+  if (recommendedConversations.length === 0) {
+    return null; // Não mostrar se não houver recomendações
+  }
+
+  return (
+    <div className="conversation-carousel recommended-carousel">
+      <div className="carousel-header">
+        <h2>🎯 Recommended for You</h2>
+        <p style={{ color: '#666', fontSize: '0.9rem', margin: '5px 0 0 0' }}>
+          Based on your level ({userLevel}) • {recommendedConversations.length} available
+        </p>
+        <div className="carousel-arrows">
+          <SamplePrevArrow onClick={() => slider.current?.slickPrev()} />
+          <SampleNextArrow onClick={() => slider.current?.slickNext()} />
+        </div>
+      </div>
+      <Slider ref={slider} {...settings}>
+        {recommendedConversations.map((conv) => {
+          const progress = conversationProgress && conversationProgress[conv.id];
+          const isCompleted = progress && progress.dialogue_completed;
+
+          return (
+            <div
+              key={conv.id}
+              className="conversation-card recommended-card"
+              onClick={() => onConversationStart(conv)}
+              style={{
+                border: '2px solid #FF385C',
+                background: 'linear-gradient(135deg, #FFF5F5 0%, #FFFFFF 100%)'
+              }}
+            >
+              <img
+                src={conv.image_url}
+                alt={conv.title}
+                className="conversation-card-image"
+              />
+              <div className="conversation-card-star" style={{
+                background: 'rgba(0, 0, 0, 0.3)',
+                color: '#FFFFFF',
+                border: 'none',
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.5)',
+                fontSize: '1.5rem',
+                fontWeight: 'normal'
+              }}>
+                {isCompleted ? '⭐' : '☆'}
+              </div>
+              <div className="conversation-card-content">
+                <h3>{conv.title}</h3>
+                <p>{conv.level ? conv.level.toUpperCase() : 'N/A'}</p>
+                <div style={{
+                  position: 'absolute',
+                  top: '5px',
+                  right: '5px',
+                  background: '#FF385C',
+                  color: 'white',
+                  borderRadius: '10px',
+                  padding: '2px 6px',
+                  fontSize: '0.7rem',
+                  fontWeight: 'bold'
+                }}>
+                  NEW
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </Slider>
+    </div>
+  );
+}

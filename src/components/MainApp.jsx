@@ -5,6 +5,7 @@ import { supabase } from '../supabaseClient';
 import ConversationListenType from './ConversationListenType';
 import ConversationQuiz from './ConversationQuiz';
 import ConversationCarousel from './ConversationCarousel';
+import RecommendedCarousel from './RecommendedCarousel';
 import Login from './Login';
 import DiamondPopup from './DiamondPopup';
 import LevelUpPopup from './LevelUpPopup';
@@ -354,6 +355,9 @@ export default function MainApp({ session }) {
       case VIEWS.CONVERSATIONS: {
         const conversationsToShow = searchTerm.trim() !== '' ? filteredConversations : conversations;
 
+        // Calcular nível do usuário baseado no progresso
+        const userLevel = _level || 'A1';
+
         // Definir ordem específica dos níveis
         const levelOrder = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'C3'];
 
@@ -372,6 +376,15 @@ export default function MainApp({ session }) {
 
         return (
           <div>
+            {/* Carrossel de Recomendações - aparece apenas se houver conversas não completadas */}
+            <RecommendedCarousel
+              conversations={conversationsToShow}
+              onConversationStart={handleConversationStart}
+              conversationProgress={_conversationProgress}
+              userLevel={userLevel}
+            />
+
+            {/* Carrosséis por nível - com priorização de cards não completados */}
             {orderedLevels.map(level => (
               <ConversationCarousel
                 key={level}
@@ -379,6 +392,7 @@ export default function MainApp({ session }) {
                 conversations={conversationsByLevel[level]}
                 onConversationStart={handleConversationStart}
                 conversationProgress={_conversationProgress}
+                prioritizeIncomplete={true}
               />
             ))}
           </div>

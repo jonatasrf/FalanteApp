@@ -21,10 +21,18 @@ export const UserProgressProvider = ({ children, session }) => {
     const [conversationProgress, setConversationProgress] = useState({});
     const [loading, setLoading] = useState(true);
     const [userProfile, setUserProfile] = useState(null);
+    const [initialized, setInitialized] = useState(false);
     const showToast = useToast();
 
     useEffect(() => {
+        // Só executa se não foi inicializado ou se a sessão mudou
+        if (initialized && ((session && progress && progress.user_id === session.user.id) || !session)) {
+            return;
+        }
+
         const fetchUserProgress = async () => {
+            setInitialized(true);
+
             if (session && session.user) {
                 // Extract Google OAuth profile information
                 const googleProfile = {
@@ -39,32 +47,28 @@ export const UserProgressProvider = ({ children, session }) => {
 
                 setUserProfile(googleProfile);
 
-                // Fetch main progress
-                const { data: mainData, error: mainError } = await supabase
-                    .from('user_progress')
-                    .select('*')
-                    .eq('user_id', session.user.id)
-                    .single();
-
-                if (mainError && mainError.code !== 'PGRST116') {
-                    showToast('Failed to load user progress.', 'error');
-                    setLoading(false);
-                    return;
-                }
-
-                if (mainData) {
-                    setProgress({ ...mainData, isGuest: false });
-                } else {
-                    // Verificar se já existe um registro antes de inserir (evitar duplicatas)
-                    const { data: existing } = await supabase
+                try {
+                    // Fetch main progress - tentativa de leitura primeiro
+                    const { data: mainData, error: mainError } = await supabase
                         .from('user_progress')
                         .select('*')
                         .eq('user_id', session.user.id)
-                        .maybeSingle();
+                        .single();
 
-                    if (existing) {
-                        setProgress({ ...existing, isGuest: false });
+                    if (mainError && mainError.code !== 'PGRST116') {
+                        console.error('Error fetching user progress:', mainError);
+                        showToast('Failed to load user progress.', 'error');
+                        setLoading(false);
+                        return;
+                    }
+
+                    if (mainData) {
+                        setProgress({ ...mainData, isGuest: false });
+                        setConversationProgress(mainData.conversation_progress || {});
+                        setLoading(false);
                     } else {
+                        // APENAS cria registro se NÃO existir (já verificado acima)
+                        console.log('Creating initial user progress record for:', session.user.id);
                         const { data: newProgress, error: insertError } = await supabase
                             .from('user_progress')
                             .insert({
@@ -74,7 +78,8 @@ export const UserProgressProvider = ({ children, session }) => {
                                 max_streak: 0,
                                 session_completed_count_listen: 0,
                                 last_level_up_count: 0,
-                                last_diamond_count: 0
+                                last_diamond_count: 0,
+                                conversation_progress: {}
                             })
                             .select()
                             .single();
@@ -82,21 +87,18 @@ export const UserProgressProvider = ({ children, session }) => {
                         if (insertError) {
                             console.error('Error creating user progress:', insertError);
                             showToast('Failed to create user profile.', 'error');
+                            setLoading(false);
                         } else if (newProgress) {
+                            console.log('User progress created successfully');
                             setProgress({ ...newProgress, isGuest: false });
+                            setConversationProgress(newProgress.conversation_progress || {});
+                            setLoading(false);
                         }
                     }
+                } catch (error) {
+                    console.error('Unexpected error in fetchUserProgress:', error);
+                    setLoading(false);
                 }
-
-                // Conversation progress is now stored in user_progress table as JSON
-                // It's already loaded with mainData.conversation_progress
-                if (mainData && mainData.conversation_progress) {
-                    setConversationProgress(mainData.conversation_progress || {});
-                } else {
-                    setConversationProgress({});
-                }
-
-                setLoading(false);
             } else {
                 setProgress(GUEST_PROGRESS);
                 setConversationProgress({});
@@ -106,7 +108,7 @@ export const UserProgressProvider = ({ children, session }) => {
         };
 
         fetchUserProgress();
-    }, [session]);
+    }, [session?.user?.id || null, initialized]); // Dependência específica para evitar recriação desnecessária
 
     const updateConversationProgress = async (conversationId, progressData) => {
         if (!session || !session.user) return;

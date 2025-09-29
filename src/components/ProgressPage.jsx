@@ -90,10 +90,11 @@ export default function ProgressPage() {
                         width: '100%',
                         mb: 4,
                         p: 6,
-                        background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)',
-                        color: '#ffffff',
+                        background: 'linear-gradient(135deg, #FFFFFF 0%, #F7F7F7 50%, #EBEBEB 100%)',
+                        color: '#484848',
                         position: 'relative',
                         textAlign: 'center',
+                        borderBottom: '1px solid #EBEBEB',
                         '&::before': {
                             content: '""',
                             position: 'absolute',
@@ -102,8 +103,8 @@ export default function ProgressPage() {
                             right: 0,
                             bottom: 0,
                             background: `
-                                radial-gradient(circle at 20% 80%, rgba(0, 255, 255, 0.2) 0%, transparent 50%),
-                                radial-gradient(circle at 80% 20%, rgba(255, 107, 107, 0.2) 0%, transparent 50%)
+                                radial-gradient(circle at 20% 80%, rgba(255, 56, 92, 0.05) 0%, transparent 50%),
+                                radial-gradient(circle at 80% 20%, rgba(0, 132, 137, 0.05) 0%, transparent 50%)
                             `,
                             pointerEvents: 'none'
                         }
@@ -113,8 +114,7 @@ export default function ProgressPage() {
                         <Typography variant="h3" component="h1" gutterBottom sx={{
                             fontWeight: 'bold',
                             fontSize: '3rem',
-                            textShadow: '0 0 20px rgba(0, 255, 255, 0.8), 0 0 40px rgba(0, 255, 255, 0.4)',
-                            background: 'linear-gradient(45deg, #00ffff, #ff6b6b)',
+                            background: 'linear-gradient(45deg, #FF385C, #008489)',
                             backgroundClip: 'text',
                             WebkitBackgroundClip: 'text',
                             WebkitTextFillColor: 'transparent'
@@ -123,9 +123,8 @@ export default function ProgressPage() {
                         </Typography>
 
                         <Typography variant="h5" sx={{
-                            color: '#ffffff',
-                            fontSize: '1.5rem',
-                            textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'
+                            color: '#767676',
+                            fontSize: '1.5rem'
                         }}>
                             Keep learning and improving! 🚀
                         </Typography>

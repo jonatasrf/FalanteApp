@@ -124,29 +124,42 @@ export default function RecommendedCarousel({ conversations, onConversationStart
               />
               <div className="conversation-card-star" style={{
                 background: 'rgba(0, 0, 0, 0.3)',
-                color: '#FFFFFF',
+                color: isCompleted ? '#FFD700' : '#CCCCCC',
                 border: 'none',
-                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.5)',
-                fontSize: '1.5rem',
-                fontWeight: 'normal'
+                boxShadow: 'none',
+                fontSize: '1.4rem',
+                fontWeight: 'normal',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '28px',
+                height: '28px',
+                borderRadius: '50%'
               }}>
-                {isCompleted ? '⭐' : '☆'}
+                ⭐
               </div>
               <div className="conversation-card-content">
                 <h3>{conv.title}</h3>
-                <p>{conv.level ? conv.level.toUpperCase() : 'N/A'}</p>
                 <div style={{
-                  position: 'absolute',
-                  top: '5px',
-                  right: '5px',
-                  background: '#FF385C',
-                  color: 'white',
-                  borderRadius: '10px',
-                  padding: '2px 6px',
-                  fontSize: '0.7rem',
-                  fontWeight: 'bold'
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  gap: '8px'
                 }}>
-                  NEW
+                  <p style={{ margin: 0, fontSize: '0.9rem' }}>
+                    {conv.level ? conv.level.toUpperCase() : 'N/A'}
+                  </p>
+                  <div style={{
+                    background: '#FF385C',
+                    color: 'white',
+                    borderRadius: '8px',
+                    padding: '2px 6px',
+                    fontSize: '0.6rem',
+                    fontWeight: 'bold',
+                    whiteSpace: 'nowrap'
+                  }}>
+                    NEW
+                  </div>
                 </div>
               </div>
             </div>

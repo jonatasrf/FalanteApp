@@ -118,14 +118,20 @@ export default function ConversationCarousel({ title, conversations, onConversat
                 className="conversation-card-image"
               />
               <div className="conversation-card-star" style={{
-                background: isCompleted ? 'rgba(0, 0, 0, 0.3)' : 'rgba(0, 0, 0, 0.3)',
-                color: isCompleted ? '#FFD700' : '#FFFFFF',
+                background: 'rgba(0, 0, 0, 0.3)',
+                color: isCompleted ? '#FFD700' : '#CCCCCC',
                 border: 'none',
-                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.5)',
-                fontSize: '1.5rem',
-                fontWeight: 'normal'
+                boxShadow: 'none',
+                fontSize: '1.4rem',
+                fontWeight: 'normal',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '28px',
+                height: '28px',
+                borderRadius: '50%'
               }}>
-                {isCompleted ? '⭐' : '☆'}
+                ⭐
               </div>
               <div className="conversation-card-content">
                 <h3>{conv.title}</h3>

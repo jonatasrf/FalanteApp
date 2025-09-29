@@ -104,7 +104,8 @@ export default function ConversationCarousel({ title, conversations, onConversat
       <Slider ref={slider} {...settings}>
         {sortedConversations.map((conv) => {
           const progress = conversationProgress && conversationProgress[conv.id];
-          const isCompleted = progress && progress.dialogue_completed;
+          // Só considerar completado se BOTH dialogo e quiz foram feitos
+          const isCompleted = progress && progress.dialogue_completed && progress.quiz_completed;
 
           return (
             <div

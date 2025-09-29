@@ -376,13 +376,15 @@ export default function MainApp({ session }) {
 
         return (
           <div>
-            {/* Carrossel de Recomendações - aparece apenas se houver conversas não completadas */}
-            <RecommendedCarousel
-              conversations={conversationsToShow}
-              onConversationStart={handleConversationStart}
-              conversationProgress={_conversationProgress}
-              userLevel={userLevel}
-            />
+            {/* Carrossel de Recomendações - aparece apenas se o usuário estiver LOGADO */}
+            {session && (
+              <RecommendedCarousel
+                conversations={conversationsToShow}
+                onConversationStart={handleConversationStart}
+                conversationProgress={_conversationProgress}
+                userLevel={userLevel}
+              />
+            )}
 
             {/* Carrosséis por nível - com priorização de cards não completados */}
             {orderedLevels.map(level => (

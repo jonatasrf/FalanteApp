@@ -94,9 +94,6 @@ export default function RecommendedCarousel({ conversations, onConversationStart
     <div className="conversation-carousel recommended-carousel">
       <div className="carousel-header">
         <h2>🎯 Recommended for You</h2>
-        <p style={{ color: '#666', fontSize: '0.9rem', margin: '5px 0 0 0' }}>
-          Based on your level ({userLevel}) • {recommendedConversations.length} available
-        </p>
         <div className="carousel-arrows">
           <SamplePrevArrow onClick={() => slider.current?.slickPrev()} />
           <SampleNextArrow onClick={() => slider.current?.slickNext()} />
@@ -105,7 +102,8 @@ export default function RecommendedCarousel({ conversations, onConversationStart
       <Slider ref={slider} {...settings}>
         {recommendedConversations.map((conv) => {
           const progress = conversationProgress && conversationProgress[conv.id];
-          const isCompleted = progress && progress.dialogue_completed;
+          // Só considerar completado se BOTH dialogo e quiz foram feitos
+          const isCompleted = progress && progress.dialogue_completed && progress.quiz_completed;
 
           return (
             <div

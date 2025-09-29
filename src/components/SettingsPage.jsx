@@ -63,9 +63,9 @@ export default function SettingsPage() {
             // 3. Sempre fazer sign out
             await supabase.auth.signOut();
 
-            // 4. Redirecionar para página inicial
+            // 4. Redirecionar para página específica
             setTimeout(() => {
-                window.location.href = '/';
+                window.location.href = 'https://jonatasrf.github.io/FalanteApp/';
             }, 1000); // Pequeno delay para garantir sign out
 
             // 5. Feedback baseado no que conseguiu fazer
@@ -233,9 +233,6 @@ export default function SettingsPage() {
                         <DialogContentText id="confirm-delete-description" sx={{ mb: 2 }}>
                             Are you sure you want to delete your account? This action cannot be undone.
                             All your progress will be permanently lost.
-                        </DialogContentText>
-                        <DialogContentText sx={{ fontSize: '0.875rem', color: 'text.secondary' }}>
-                            To complete the deletion, you will need to visit the Supabase dashboard after signing out.
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions sx={{ justifyContent: 'center', pb: 3 }}>

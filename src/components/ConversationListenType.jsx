@@ -15,7 +15,7 @@ export default function ConversationListenType({ conversation, onConversationCom
     const [feedback, setFeedback] = useState({ message: 'Listen to the phrase first.', type: 'default', severity: 'info' });
     const [isCorrect, setIsCorrect] = useState(false);
     const [isPracticeComplete, setIsPracticeComplete] = useState(false);
-
+    const [isFullyCompleted, setIsFullyCompleted] = useState(false);
 
     const textFieldRef = useRef(null);
 
@@ -302,13 +302,15 @@ export default function ConversationListenType({ conversation, onConversationCom
         if (savedProgress) {
             if (savedProgress.quiz_completed) {
                 // Se completou o quiz, mostrar interface de completo (com retry)
+                setIsFullyCompleted(true);
                 setIsPracticeComplete(true);
             } else if (!savedProgress.dialogue_completed) {
                 // Se não completou ainda, continuar de onde parou
                 setCurrentPhraseIndex(savedProgress.current_phrase_index || 0);
             } else {
-                // Se completou dialogo mas não quiz, começar do zero
-                setCurrentPhraseIndex(0);
+                // Se completou dialogo mas não quiz, mostrar interface de revisão dos diálogos
+                setIsFullyCompleted(false); // Não completou quiz ainda
+                setIsPracticeComplete(true);
             }
         }
     }, [conversation.id, conversationProgress, conversation.phrases.length]);
@@ -480,6 +482,12 @@ export default function ConversationListenType({ conversation, onConversationCom
         });
     };
 
+    // Função para iniciar o quiz (quando diálogo está completo mas quiz não)
+    const handleStartQuiz = () => {
+        // Vai para o fluxo do MainApp onde o quiz será iniciado
+        onConversationComplete(conversation);
+    };
+
     const handleKeyPress = (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
@@ -578,20 +586,28 @@ export default function ConversationListenType({ conversation, onConversationCom
     };
 
     if (isPracticeComplete) {
+        const isQuizIncomplete = !isFullyCompleted; // Diálogos completos, mas quiz não
+
         return (
             <Card sx={{ width: '100%' }}>
                 <CardContent>
                     <Box sx={{ textAlign: 'center', mb: 3 }}>
-                        <Typography variant="h3" sx={{ mb: 1 }}>🎉</Typography>
+                        <Typography variant="h3" sx={{ mb: 1 }}>
+                            {isQuizIncomplete ? '📝' : '🎉'}
+                        </Typography>
                         <Typography variant="h5" component="h2" gutterBottom>
-                            Congratulations!
+                            {isQuizIncomplete ? 'Dialogue Completed!' : 'Congratulations!'}
                         </Typography>
                         <Typography variant="body1" sx={{ color: '#666', mb: 2 }}>
-                            You have successfully completed: <strong>{conversation.title}</strong>
+                            {isQuizIncomplete ? 'Now practice with the quiz:' : 'You have successfully completed:'}
+                            <strong> {conversation.title}</strong>
                         </Typography>
                     </Box>
 
                     <Box sx={{ mb: 3 }}>
+                        <Typography variant="body2" sx={{ mb: 1, color: '#888', fontStyle: 'italic' }}>
+                            {isQuizIncomplete ? 'Listen again to remember the phrases before the quiz:' : 'Full dialogue:'}
+                        </Typography>
                         <List>
                             {conversation.phrases.map((phrase, index) => (
                                 <ListItem key={index} secondaryAction={
@@ -616,7 +632,7 @@ export default function ConversationListenType({ conversation, onConversationCom
                         <Button
                             variant="contained"
                             color="primary"
-                            onClick={handleRetry}
+                            onClick={isQuizIncomplete ? handleStartQuiz : handleRetry}
                             sx={{
                                 px: 3,
                                 py: 1.5,
@@ -624,7 +640,7 @@ export default function ConversationListenType({ conversation, onConversationCom
                                 fontWeight: 'bold'
                             }}
                         >
-                            🔄 Try Again
+                            {isQuizIncomplete ? '🧠 Take Quiz' : '🔄 Try Again'}
                         </Button>
                         <Button
                             variant="outlined"

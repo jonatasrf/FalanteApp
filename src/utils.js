@@ -104,7 +104,7 @@ export function normalizeText(text) {
     if (!text) return "";
     let normalized = text.toLowerCase();
 
-    // Expand common contractions
+    // Expand common contractions - mantendo apenas as essenciais
     normalized = normalized.replace(/it's/g, 'it is');
     normalized = normalized.replace(/i'm/g, 'i am');
     normalized = normalized.replace(/you're/g, 'you are');
@@ -112,6 +112,13 @@ export function normalizeText(text) {
     normalized = normalized.replace(/she's/g, 'she is');
     normalized = normalized.replace(/we're/g, 'we are');
     normalized = normalized.replace(/they're/g, 'they are');
+    normalized = normalized.replace(/that's/g, 'that is');
+    normalized = normalized.replace(/there's/g, 'there is');
+    normalized = normalized.replace(/here's/g, 'here is');
+    normalized = normalized.replace(/where's/g, 'where is');
+    normalized = normalized.replace(/what's/g, 'what is');
+    normalized = normalized.replace(/who's/g, 'who is');
+    normalized = normalized.replace(/how's/g, 'how is');
     normalized = normalized.replace(/won't/g, 'will not');
     normalized = normalized.replace(/don't/g, 'do not');
     normalized = normalized.replace(/can't/g, 'cannot');
@@ -127,14 +134,39 @@ export function normalizeText(text) {
     normalized = normalized.replace(/shouldn't/g, 'should not');
     normalized = normalized.replace(/mightn't/g, 'might not');
     normalized = normalized.replace(/mustn't/g, 'must not');
+    normalized = normalized.replace(/i'll/g, 'i will');
+    normalized = normalized.replace(/you'll/g, 'you will');
+    normalized = normalized.replace(/he'll/g, 'he will');
+    normalized = normalized.replace(/she'll/g, 'she will');
+    normalized = normalized.replace(/we'll/g, 'we will');
+    normalized = normalized.replace(/they'll/g, 'they will');
+    normalized = normalized.replace(/it'll/g, 'it will');
+    normalized = normalized.replace(/that'll/g, 'that will');
+    normalized = normalized.replace(/there'll/g, 'there will');
+    normalized = normalized.replace(/i've/g, 'i have');
+    normalized = normalized.replace(/you've/g, 'you have');
+    normalized = normalized.replace(/we've/g, 'we have');
+    normalized = normalized.replace(/they've/g, 'they have');
+    normalized = normalized.replace(/i'd/g, 'i would');
+    normalized = normalized.replace(/you'd/g, 'you would');
+    normalized = normalized.replace(/he'd/g, 'he would');
+    normalized = normalized.replace(/she'd/g, 'she would');
+    normalized = normalized.replace(/we'd/g, 'we would');
+    normalized = normalized.replace(/they'd/g, 'they would');
+    normalized = normalized.replace(/it'd/g, 'it would');
+    normalized = normalized.replace(/that'd/g, 'that would');
     normalized = normalized.replace(/'ll/g, ' will');
     normalized = normalized.replace(/'ve/g, ' have');
     normalized = normalized.replace(/'d/g, ' would');
     normalized = normalized.replace(/n't/g, ' not');
 
-    normalized = normalized.replace(/’/g, "'"); // Handle apostrophes specifically
-    normalized = normalized.replace(/[^a-z0-9\s]/g, ''); // Remove all non-alphanumeric characters except spaces
-    normalized = normalized.replace(/\s+/g, ' '); // Replace multiple spaces with a single space
+    // Contrações possessivas
+    normalized = normalized.replace(/let's/g, 'let us');
+
+    // Limpeza final
+    normalized = normalized.replace(/’/g, "'"); // Normalizar apóstrofos
+    normalized = normalized.replace(/[^a-z0-9\s]/g, ''); // Remover pontuação
+    normalized = normalized.replace(/\s+/g, ' '); // Normalizar espaços
     return normalized.trim();
 }
 

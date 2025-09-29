@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
-import { Box, Typography, Container, Card, CardContent, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Switch, FormControlLabel } from '@mui/material';
+import { Box, Typography, Container, Card, CardContent, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { supabase } from '../supabaseClient';
 import { useToast } from '../contexts/ToastContext';
-import { useTheme } from '../contexts/ThemeContext';
 
 export default function SettingsPage() {
     const [showConfirmDialog, setShowConfirmDialog] = useState(false);
     const showToast = useToast();
-    const { isDarkMode, toggleTheme } = useTheme();
 
     const handleDeleteAccount = () => {
         setShowConfirmDialog(true);
@@ -106,43 +102,6 @@ export default function SettingsPage() {
                             <Typography variant="body1" sx={{ mb: 4, opacity: 0.9 }}>
                                 Here you can manage your account preferences and settings.
                             </Typography>
-
-                            {/* Theme Settings Section */}
-                            <Box sx={{ mb: 4 }}>
-                                <Typography variant="h6" sx={{ mb: 2, color: '#00ffff' }}>
-                                    Appearance
-                                </Typography>
-
-                                <Box sx={{ p: 3, backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: 2, border: '1px solid rgba(255,255,255,0.1)' }}>
-                                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                            {isDarkMode ? (
-                                                <Brightness4Icon sx={{ mr: 2, color: '#00ffff' }} />
-                                            ) : (
-                                                <Brightness7Icon sx={{ mr: 2, color: '#00ffff' }} />
-                                            )}
-                                            <Box>
-                                                <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
-                                                    Theme Mode
-                                                </Typography>
-                                                <Typography variant="body2" sx={{ opacity: 0.8 }}>
-                                                    {isDarkMode ? 'Dark theme (Falante)' : 'Light theme (Modern)'}
-                                                </Typography>
-                                            </Box>
-                                        </Box>
-                                        <FormControlLabel
-                                            control={
-                                                <Switch
-                                                    checked={isDarkMode}
-                                                    onChange={toggleTheme}
-                                                    color="primary"
-                                                />
-                                            }
-                                            label=""
-                                        />
-                                    </Box>
-                                </Box>
-                            </Box>
 
                             {/* Account Management Section */}
                             <Box sx={{ mb: 4 }}>

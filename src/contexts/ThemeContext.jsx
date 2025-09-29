@@ -1,39 +1,95 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React from 'react';
 import { createTheme } from '@mui/material/styles';
 
-// Tema escuro atual (Falante)
-const darkTheme = createTheme({
+// Tema Airbnb-inspired
+const airbnbTheme = createTheme({
   palette: {
-    mode: 'dark',
+    mode: 'light',
     primary: {
-      main: '#00ffff', // Ciano
+      main: '#FF385C', // Airbnb red
+      light: '#FF5A5F',
+      dark: '#E31B23',
     },
     secondary: {
-      main: '#ff6b6b', // Coral
+      main: '#008489', // Airbnb teal
+      light: '#00A699',
+      dark: '#007A87',
     },
     background: {
-      default: '#0a0a0a',
-      paper: '#1a1a1a',
+      default: '#FFFFFF',
+      paper: '#FFFFFF',
     },
     text: {
-      primary: '#ffffff',
-      secondary: '#cccccc',
+      primary: '#484848',
+      secondary: '#767676',
+    },
+    grey: {
+      50: '#F7F7F7',
+      100: '#EBEBEB',
+      200: '#DDDDDD',
+      300: '#CCCCCC',
+      400: '#999999',
+      500: '#767676',
+      600: '#484848',
+      700: '#222222',
     },
   },
   typography: {
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    fontFamily: '"Circular", "-apple-system", "BlinkMacSystemFont", "Roboto", "Helvetica Neue", "sans-serif"',
     h1: {
-      fontWeight: 700,
+      fontSize: '3rem',
+      fontWeight: 800,
+      color: '#484848',
+      lineHeight: 1.2,
     },
     h2: {
-      fontWeight: 600,
+      fontSize: '2.25rem',
+      fontWeight: 700,
+      color: '#484848',
+      lineHeight: 1.3,
     },
     h3: {
+      fontSize: '1.875rem',
       fontWeight: 600,
+      color: '#484848',
+      lineHeight: 1.4,
+    },
+    h4: {
+      fontSize: '1.5rem',
+      fontWeight: 600,
+      color: '#484848',
+      lineHeight: 1.4,
+    },
+    h5: {
+      fontSize: '1.25rem',
+      fontWeight: 600,
+      color: '#484848',
+      lineHeight: 1.4,
+    },
+    h6: {
+      fontSize: '1.125rem',
+      fontWeight: 600,
+      color: '#484848',
+      lineHeight: 1.4,
+    },
+    body1: {
+      fontSize: '1rem',
+      lineHeight: 1.5,
+      color: '#484848',
+    },
+    body2: {
+      fontSize: '0.875rem',
+      lineHeight: 1.43,
+      color: '#767676',
+    },
+    button: {
+      textTransform: 'none',
+      fontWeight: 600,
+      fontSize: '1rem',
     },
   },
   shape: {
-    borderRadius: 8,
+    borderRadius: 12,
   },
   components: {
     MuiButton: {
@@ -41,130 +97,36 @@ const darkTheme = createTheme({
         root: {
           textTransform: 'none',
           fontWeight: 600,
-        },
-      },
-    },
-    MuiCard: {
-      styleOverrides: {
-        root: {
-          backgroundImage: 'none',
-        },
-      },
-    },
-  },
-});
-
-// Tema claro moderno
-const lightTheme = createTheme({
-  palette: {
-    mode: 'light',
-    primary: {
-      main: '#1976d2', // Azul Material-UI
-      light: '#42a5f5',
-      dark: '#1565c0',
-    },
-    secondary: {
-      main: '#dc004e', // Rosa Material-UI
-      light: '#ff5983',
-      dark: '#9a0036',
-    },
-    background: {
-      default: '#fafafa',
-      paper: '#ffffff',
-    },
-    text: {
-      primary: '#212121',
-      secondary: '#757575',
-    },
-    grey: {
-      50: '#fafafa',
-      100: '#f5f5f5',
-      200: '#eeeeee',
-      300: '#e0e0e0',
-      400: '#bdbdbd',
-      500: '#9e9e9e',
-      600: '#757575',
-      700: '#616161',
-      800: '#424242',
-      900: '#212121',
-    },
-  },
-  typography: {
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-    h1: {
-      fontSize: '2.5rem',
-      fontWeight: 700,
-      color: '#212121',
-    },
-    h2: {
-      fontSize: '2rem',
-      fontWeight: 600,
-      color: '#212121',
-    },
-    h3: {
-      fontSize: '1.5rem',
-      fontWeight: 500,
-      color: '#212121',
-    },
-    h4: {
-      fontSize: '1.25rem',
-      fontWeight: 500,
-      color: '#212121',
-    },
-    h5: {
-      fontSize: '1.125rem',
-      fontWeight: 500,
-      color: '#212121',
-    },
-    h6: {
-      fontSize: '1rem',
-      fontWeight: 500,
-      color: '#212121',
-    },
-    body1: {
-      fontSize: '1rem',
-      lineHeight: 1.5,
-      color: '#212121',
-    },
-    body2: {
-      fontSize: '0.875rem',
-      lineHeight: 1.43,
-      color: '#757575',
-    },
-    button: {
-      textTransform: 'none',
-      fontWeight: 500,
-    },
-  },
-  shape: {
-    borderRadius: 8,
-  },
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          textTransform: 'none',
-          fontWeight: 500,
           borderRadius: 8,
-          padding: '12px 24px',
+          padding: '14px 24px',
+          fontSize: '1rem',
           boxShadow: 'none',
+          transition: 'all 0.2s ease',
           '&:hover': {
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+            transform: 'translateY(-1px)',
           },
         },
         contained: {
-          backgroundColor: '#1976d2',
-          color: '#ffffff',
+          backgroundColor: '#FF385C',
+          color: '#FFFFFF',
           '&:hover': {
-            backgroundColor: '#1565c0',
+            backgroundColor: '#E31B23',
           },
         },
         outlined: {
-          borderColor: '#e0e0e0',
-          color: '#212121',
+          borderColor: '#DDDDDD',
+          color: '#484848',
+          backgroundColor: '#FFFFFF',
           '&:hover': {
-            backgroundColor: '#f5f5f5',
-            borderColor: '#bdbdbd',
+            backgroundColor: '#F7F7F7',
+            borderColor: '#CCCCCC',
+          },
+        },
+        text: {
+          color: '#484848',
+          '&:hover': {
+            backgroundColor: 'rgba(0, 0, 0, 0.04)',
           },
         },
       },
@@ -172,11 +134,13 @@ const lightTheme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: 12,
-          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-          border: '1px solid #e0e0e0',
+          borderRadius: 16,
+          boxShadow: '0 2px 16px rgba(0, 0, 0, 0.08)',
+          border: '1px solid #EBEBEB',
+          transition: 'all 0.3s ease',
           '&:hover': {
-            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.15)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
+            transform: 'translateY(-2px)',
           },
         },
       },
@@ -185,15 +149,17 @@ const lightTheme = createTheme({
       styleOverrides: {
         root: {
           backgroundImage: 'none',
+          borderRadius: 16,
         },
       },
     },
     MuiAppBar: {
       styleOverrides: {
         root: {
-          backgroundColor: '#ffffff',
-          color: '#212121',
-          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+          backgroundColor: '#FFFFFF',
+          color: '#484848',
+          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)',
+          borderBottom: '1px solid #EBEBEB',
         },
       },
     },
@@ -201,61 +167,49 @@ const lightTheme = createTheme({
       styleOverrides: {
         root: {
           '& .MuiOutlinedInput-root': {
-            borderRadius: 8,
-            backgroundColor: '#ffffff',
+            borderRadius: 12,
+            backgroundColor: '#FFFFFF',
+            transition: 'all 0.2s ease',
             '& fieldset': {
-              borderColor: '#e0e0e0',
+              borderColor: '#DDDDDD',
+              borderWidth: '2px',
             },
             '&:hover fieldset': {
-              borderColor: '#bdbdbd',
+              borderColor: '#CCCCCC',
             },
             '&.Mui-focused fieldset': {
-              borderColor: '#1976d2',
+              borderColor: '#FF385C',
+            },
+            '&.Mui-focused': {
+              boxShadow: '0 0 0 3px rgba(255, 56, 92, 0.1)',
             },
           },
+          '& .MuiInputLabel-root': {
+            color: '#767676',
+            '&.Mui-focused': {
+              color: '#FF385C',
+            },
+          },
+        },
+      },
+    },
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          borderRadius: 16,
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
+        },
+      },
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          borderRadius: 8,
+          fontWeight: 500,
         },
       },
     },
   },
 });
 
-const ThemeContext = createContext();
-
-export const useTheme = () => {
-  const context = useContext(ThemeContext);
-  if (!context) {
-    throw new Error('useTheme must be used within a ThemeProvider');
-  }
-  return context;
-};
-
-export const ThemeProvider = ({ children }) => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  // Carregar preferência do usuário do localStorage
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('falante-theme');
-    if (savedTheme) {
-      setIsDarkMode(savedTheme === 'dark');
-    } else {
-      // Detectar preferência do sistema
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setIsDarkMode(prefersDark);
-    }
-  }, []);
-
-  // Salvar preferência no localStorage
-  const toggleTheme = () => {
-    const newTheme = !isDarkMode;
-    setIsDarkMode(newTheme);
-    localStorage.setItem('falante-theme', newTheme ? 'dark' : 'light');
-  };
-
-  const theme = isDarkMode ? darkTheme : lightTheme;
-
-  return (
-    <ThemeContext.Provider value={{ isDarkMode, toggleTheme, theme }}>
-      {children}
-    </ThemeContext.Provider>
-  );
-};
+export default airbnbTheme;

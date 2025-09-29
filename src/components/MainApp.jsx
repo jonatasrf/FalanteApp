@@ -195,9 +195,7 @@ export default function MainApp({ session }) {
         return (
           <Box sx={{
             minHeight: '100vh',
-            background: (theme) => theme.palette.mode === 'dark'
-              ? 'linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)'
-              : 'linear-gradient(135deg, #FFFFFF 0%, #F7F7F7 50%, #EBEBEB 100%)',
+            background: 'linear-gradient(135deg, #FFFFFF 0%, #F7F7F7 50%, #EBEBEB 100%)',
             position: 'relative',
             '&::before': {
               content: '""',
@@ -206,15 +204,10 @@ export default function MainApp({ session }) {
               left: 0,
               right: 0,
               bottom: 0,
-              background: (theme) => theme.palette.mode === 'dark'
-                ? `
-                  radial-gradient(circle at 20% 80%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
-                  radial-gradient(circle at 80% 20%, rgba(255, 107, 107, 0.1) 0%, transparent 50%)
-                `
-                : `
-                  radial-gradient(circle at 20% 80%, rgba(255, 107, 107, 0.05) 0%, transparent 50%),
-                  radial-gradient(circle at 80% 20%, rgba(0, 168, 168, 0.05) 0%, transparent 50%)
-                `,
+              background: `
+                radial-gradient(circle at 20% 80%, rgba(255, 56, 92, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0, 132, 137, 0.05) 0%, transparent 50%)
+              `,
               pointerEvents: 'none'
             }
           }}>
@@ -233,15 +226,10 @@ export default function MainApp({ session }) {
                   fontSize: { xs: '2.5rem', md: '4rem' },
                   fontWeight: 800,
                   mb: 2,
-                  background: (theme) => theme.palette.mode === 'dark'
-                    ? 'linear-gradient(45deg, #00ffff, #ff6b6b)'
-                    : 'linear-gradient(45deg, #1976d2, #dc004e)',
+                  background: 'linear-gradient(45deg, #FF385C, #008489)',
                   backgroundClip: 'text',
                   WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  textShadow: (theme) => theme.palette.mode === 'dark'
-                    ? '0 0 20px rgba(0, 255, 255, 0.8), 0 0 40px rgba(0, 255, 255, 0.4)'
-                    : 'none'
+                  WebkitTextFillColor: 'transparent'
                 }}
               >
                 Welcome to Falante
@@ -251,7 +239,7 @@ export default function MainApp({ session }) {
                 variant="h5"
                 sx={{
                   mb: 6,
-                  color: (theme) => theme.palette.mode === 'dark' ? '#cccccc' : '#767676',
+                  color: '#767676',
                   fontSize: { xs: '1.25rem', md: '1.5rem' },
                   maxWidth: 600,
                   mx: 'auto'
@@ -274,17 +262,13 @@ export default function MainApp({ session }) {
                 ].map((feature, index) => (
                   <Card key={index} sx={{
                     p: 3,
-                    backgroundColor: (theme) => theme.palette.mode === 'dark'
-                      ? 'rgba(255, 255, 255, 0.05)'
-                      : 'rgba(255, 255, 255, 0.8)',
-                    border: (theme) => `1px solid ${theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.1)' : '#EBEBEB'}`,
+                    backgroundColor: '#FFFFFF',
+                    border: '1px solid #EBEBEB',
                     borderRadius: 3,
                     transition: 'all 0.3s ease',
                     '&:hover': {
                       transform: 'translateY(-4px)',
-                      boxShadow: (theme) => theme.palette.mode === 'dark'
-                        ? '0 8px 25px rgba(0, 255, 255, 0.2)'
-                        : '0 8px 25px rgba(0, 0, 0, 0.1)'
+                      boxShadow: '0 8px 25px rgba(0, 0, 0, 0.1)'
                     }
                   }}>
                     <Typography variant="h3" sx={{ mb: 2, fontSize: '2rem' }}>
@@ -293,9 +277,7 @@ export default function MainApp({ session }) {
                     <Typography variant="h6" sx={{ mb: 1, fontWeight: 600 }}>
                       {feature.title}
                     </Typography>
-                    <Typography variant="body2" sx={{
-                      color: (theme) => theme.palette.mode === 'dark' ? '#cccccc' : '#767676'
-                    }}>
+                    <Typography variant="body2" sx={{ color: '#767676' }}>
                       {feature.desc}
                     </Typography>
                   </Card>
@@ -330,7 +312,7 @@ export default function MainApp({ session }) {
                       <Typography sx={{
                         mr: 2,
                         fontWeight: 'bold',
-                        color: (theme) => theme.palette.primary.main,
+                        color: '#FF385C',
                         minWidth: '24px'
                       }}>
                         {index + 1}.
@@ -353,10 +335,10 @@ export default function MainApp({ session }) {
                   fontSize: '1.25rem',
                   fontWeight: 600,
                   borderRadius: 3,
-                  backgroundColor: (theme) => theme.palette.primary.main,
-                  color: (theme) => theme.palette.primary.contrastText,
+                  backgroundColor: '#FF385C',
+                  color: '#FFFFFF',
                   '&:hover': {
-                    backgroundColor: (theme) => theme.palette.primary.dark,
+                    backgroundColor: '#E31B23',
                     transform: 'translateY(-2px)',
                     boxShadow: '0 6px 20px rgba(0, 0, 0, 0.2)'
                   },

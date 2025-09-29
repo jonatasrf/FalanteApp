@@ -1,24 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { ToastProvider } from './contexts/ToastContext';
 import { UserProgressProvider } from './contexts/UserProgressContext';
-import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
-import { ThemeProvider, useTheme } from './contexts/ThemeContext';
+import airbnbTheme from './contexts/ThemeContext';
 import { supabase } from './supabaseClient';
 import MainApp from './components/MainApp';
 import './App.css';
-import './falante-theme.css';
 
 function App() {
-  return (
-    <ThemeProvider>
-      <AppContent />
-    </ThemeProvider>
-  );
-}
-
-function AppContent() {
-  const { theme } = useTheme();
   const [session, setSession] = useState(null);
 
   useEffect(() => {
@@ -49,14 +39,14 @@ function AppContent() {
   }, []);
 
   return (
-    <MuiThemeProvider theme={theme}>
+    <ThemeProvider theme={airbnbTheme}>
       <CssBaseline />
       <ToastProvider>
         <UserProgressProvider session={session}>
           <MainApp session={session} />
         </UserProgressProvider>
       </ToastProvider>
-    </MuiThemeProvider>
+    </ThemeProvider>
   );
 }
 

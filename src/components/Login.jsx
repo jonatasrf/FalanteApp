@@ -283,9 +283,7 @@ export default function Login() {
         <Box component="main" sx={{
             width: '100%',
             minHeight: '100vh',
-            background: (theme) => theme.palette.mode === 'dark'
-                ? 'linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)'
-                : 'linear-gradient(135deg, #FFFFFF 0%, #F7F7F7 50%, #EBEBEB 100%)',
+            background: 'linear-gradient(135deg, #FFFFFF 0%, #F7F7F7 50%, #EBEBEB 100%)',
             position: 'relative',
             display: 'flex',
             alignItems: 'center',
@@ -297,15 +295,10 @@ export default function Login() {
                 left: 0,
                 right: 0,
                 bottom: 0,
-                background: (theme) => theme.palette.mode === 'dark'
-                    ? `
-                        radial-gradient(circle at 20% 80%, rgba(0, 255, 255, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 20%, rgba(255, 107, 107, 0.1) 0%, transparent 50%)
-                    `
-                    : `
-                        radial-gradient(circle at 20% 80%, rgba(255, 107, 107, 0.05) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 20%, rgba(0, 168, 168, 0.05) 0%, transparent 50%)
-                    `,
+                background: `
+                    radial-gradient(circle at 20% 80%, rgba(255, 56, 92, 0.05) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 20%, rgba(0, 132, 137, 0.05) 0%, transparent 50%)
+                `,
                 pointerEvents: 'none'
             }
         }}>
@@ -318,13 +311,12 @@ export default function Login() {
                         alignItems: 'center',
                     }}
                 >
-                    <Typography component="h1" variant="h5" sx={(theme) => ({
-                        color: theme.palette.mode === 'dark' ? '#ffffff' : '#484848',
-                        textShadow: theme.palette.mode === 'dark' ? '0 0 15px rgba(0, 255, 255, 0.6)' : 'none',
+                    <Typography component="h1" variant="h5" sx={{
+                        color: '#484848',
                         fontSize: '2rem',
                         fontWeight: 'bold',
                         mb: 3
-                    })}>
+                    }}>
                         {view}
                     </Typography>
                     {renderForm()}

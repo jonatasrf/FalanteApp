@@ -7,12 +7,12 @@ import { SampleNextArrow, SamplePrevArrow } from "./CarouselArrows";
 export default function IncompleteConversationsCarousel({ conversations, onConversationStart, conversationProgress, userLevel = 'A1' }) {
   const slider = useRef(null);
 
-  // Filtrar apenas conversas incompletas (não completadas totalmente)
+  // Filtrar apenas conversas já iniciadas mas não completadas
   const incompleteConversations = useMemo(() => {
     return conversations.filter(conv => {
       const progress = conversationProgress && conversationProgress[conv.id];
-      // Considerar incompleta se não tem progresso OU não completou o card completamente
-      return !progress || !progress.quiz_completed;
+      // Considerar apenas se TEM progresso E não completou totalmente
+      return progress && !progress.quiz_completed;
     });
   }, [conversations, conversationProgress]);
 

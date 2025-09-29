@@ -15,7 +15,7 @@ import { calculateStarRating } from '../utils.js';
 import { supabase } from '../supabaseClient';
 
 export default function ProgressPage() {
-    const { level, diamonds, correct_sentences_count, current_streak, isGuest, conversationProgress } = useUserProgress();
+    const { level, diamonds, correct_sentences_count, current_streak, max_streak, isGuest, conversationProgress } = useUserProgress();
     const [conversations, setConversations] = useState([]);
     const [loadingConversations, setLoadingConversations] = useState(true);
     const [errorConversations, setErrorConversations] = useState(null);
@@ -332,7 +332,7 @@ export default function ProgressPage() {
                                             position: 'relative'
                                         }}>
                                             <TimelineIcon sx={{ fontSize: 30, color: '#ffffff' }} />
-                                            {current_streak > 0 && (
+                                            {(progress?.max_streak || 0) > 0 && (
                                                 <Box sx={{
                                                     position: 'absolute',
                                                     top: -8,
@@ -353,11 +353,11 @@ export default function ProgressPage() {
                                             )}
                                         </Box>
                                         <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
-                                            {current_streak}
+                                            {progress?.max_streak || 0}
                                         </Typography>
-                                        <Typography variant="body2" sx={{ mb: 2, opacity: 0.9 }}>Current Streak</Typography>
+                                        <Typography variant="body2" sx={{ mb: 2, opacity: 0.9 }}>Best Streak</Typography>
                                         <Typography variant="caption" sx={{ fontSize: '0.7rem', opacity: 0.8, lineHeight: 1.2 }}>
-                                            Consecutive correct answers. Resets to 0 when you make an error.
+                                            Your personal best! Maximum consecutive correct answers achieved.
                                         </Typography>
                                     </CardContent>
                                 </Card>

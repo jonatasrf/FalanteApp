@@ -8,6 +8,7 @@ const UserProgressContext = createContext(null);
 const GUEST_PROGRESS = {
     correct_sentences_count: 0,
     current_streak: 0,
+    max_streak: 0,
     session_completed_count_listen: 0,
     last_level_up_count: 0,
     last_diamond_count: 0,
@@ -123,7 +124,13 @@ export const UserProgressProvider = ({ children, session }) => {
     const incrementCorrectSentences = useCallback(() => {
         if (progress && !progress.isGuest) {
             const newCount = progress.correct_sentences_count + 1;
-            updateProgress({ correct_sentences_count: newCount, current_streak: progress.current_streak + 1 });
+            const newCurrentStreak = progress.current_streak + 1;
+            const newMaxStreak = Math.max(progress.max_streak || 0, newCurrentStreak);
+            updateProgress({
+                correct_sentences_count: newCount,
+                current_streak: newCurrentStreak,
+                max_streak: newMaxStreak
+            });
         }
     }, [progress]);
 

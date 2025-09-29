@@ -701,7 +701,7 @@ export default function ProgressPage() {
                                             id: 'practice_days',
                                             title: 'Practice 5 days this week',
                                             target: 5,
-                                            current: 3, // This would need to be calculated from activity logs
+                                            current: correct_sentences_count > 10 ? 2 : 0, // Novo usuário = 0, usuário ativo = aproximado da atividade
                                             icon: '📅',
                                             reward: 'Weekly Champion'
                                         }

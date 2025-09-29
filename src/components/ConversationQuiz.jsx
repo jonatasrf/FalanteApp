@@ -40,9 +40,10 @@ export default function ConversationQuiz({ conversation, onQuizComplete }) {
         });
         setScore(correctCount);
         setShowResults(true);
-        updateConversationProgress(conversation.id, { 
+        updateConversationProgress(conversation.id, {
             quiz_score: correctCount,
-            quiz_max_score: conversation.objectiveQuestions.length
+            quiz_max_score: conversation.objectiveQuestions.length,
+            quiz_completed: true
         });
     };
 

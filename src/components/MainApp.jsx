@@ -140,10 +140,12 @@ export default function MainApp({ session }) {
   };
 
   const handleConversationComplete = () => {
+    // Diálogo completado - ativa quiz
     setQuizReady(true);
   };
 
   const handleQuizComplete = () => {
+    // Quiz terminado - volta para listagem
     setSelectedConversation(null);
     setQuizReady(false);
     setActiveView(VIEWS.CONVERSATIONS);

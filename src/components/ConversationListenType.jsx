@@ -482,11 +482,7 @@ export default function ConversationListenType({ conversation, onConversationCom
         });
     };
 
-    // Função para iniciar o quiz (quando diálogo está completo mas quiz não)
-    const handleStartQuiz = () => {
-        // Vai para o fluxo do MainApp onde o quiz será iniciado
-        onConversationComplete(conversation);
-    };
+
 
     const handleKeyPress = (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
@@ -632,7 +628,7 @@ export default function ConversationListenType({ conversation, onConversationCom
                         <Button
                             variant="contained"
                             color="primary"
-                            onClick={isQuizIncomplete ? handleStartQuiz : handleRetry}
+                            onClick={isQuizIncomplete ? () => onConversationComplete(conversation) : handleRetry}
                             sx={{
                                 px: 3,
                                 py: 1.5,

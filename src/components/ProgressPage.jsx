@@ -168,10 +168,10 @@ export default function ProgressPage() {
                                         }}>
                                             <SchoolIcon sx={{ fontSize: 30, color: '#ffffff' }} />
                                         </Box>
-                        <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1, color: '#4A90E2' }}>
+                        <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1, color: '#ffffff' }}>
                             {level}
                         </Typography>
-                        <Typography variant="body2" sx={{ mb: 2, color: '#E8F4FD' }}>Current Level</Typography>
+                        <Typography variant="body2" sx={{ mb: 2, color: '#ffffff', fontWeight: 'bold' }}>Current Level</Typography>
                                         <Typography variant="caption" sx={{ fontSize: '0.7rem', opacity: 0.95, lineHeight: 1.2, color: 'rgba(255,255,255,0.95)' }}>
                                             Earn levels by completing conversations. Each level requires more sentences to advance.
                                         </Typography>
@@ -213,10 +213,10 @@ export default function ProgressPage() {
                                         }}>
                                             <DiamondOutlinedIcon sx={{ fontSize: 30, color: '#ffffff' }} />
                                         </Box>
-                                        <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
+                                        <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1, color: '#ffffff' }}>
                                             {diamonds}
                                         </Typography>
-                                        <Typography variant="body2" sx={{ mb: 2, opacity: 0.9 }}>Diamonds</Typography>
+                                        <Typography variant="body2" sx={{ mb: 2, opacity: 1, color: '#ffffff', fontWeight: 'bold' }}>Diamonds</Typography>
 
                                         {/* Progress bar for next diamond */}
                                         {(() => {
@@ -227,10 +227,10 @@ export default function ProgressPage() {
                                             return (
                                                 <Box sx={{ width: '100%', mt: 1 }}>
                                                     <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
-                                                        <Typography variant="caption" sx={{ fontSize: '0.7rem', opacity: 0.9 }}>
+                                                        <Typography variant="caption" sx={{ fontSize: '0.7rem', opacity: 1, color: '#ffffff', fontWeight: 'bold' }}>
                                                             Next: {remaining} sentences
                                                         </Typography>
-                                                        <Typography variant="caption" sx={{ fontSize: '0.7rem', opacity: 0.9 }}>
+                                                        <Typography variant="caption" sx={{ fontSize: '0.7rem', opacity: 1, color: '#ffffff', fontWeight: 'bold' }}>
                                                             {currentProgress}/100
                                                         </Typography>
                                                     </Box>
@@ -288,11 +288,11 @@ export default function ProgressPage() {
                                         }}>
                                             <TrendingUpIcon sx={{ fontSize: 30, color: '#ffffff' }} />
                                         </Box>
-                                        <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
+                                        <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1, color: '#ffffff' }}>
                                             {correct_sentences_count}
                                         </Typography>
-                                        <Typography variant="body2" sx={{ mb: 2, opacity: 0.9 }}>Correct Sentences</Typography>
-                                        <Typography variant="caption" sx={{ fontSize: '0.7rem', opacity: 0.95, lineHeight: 1.2, color: 'rgba(255,255,255,0.95)' }}>
+                                        <Typography variant="body2" sx={{ mb: 2, opacity: 1, color: '#ffffff', fontWeight: 'bold' }}>Correct Sentences</Typography>
+                                        <Typography variant="caption" sx={{ fontSize: '0.7rem', opacity: 1, lineHeight: 1.2, color: '#ffffff', fontWeight: 'bold' }}>
                                             Total sentences answered correctly. Every 100 correct sentences earns a diamond.
                                         </Typography>
                                     </CardContent>
@@ -352,12 +352,12 @@ export default function ProgressPage() {
                                                 </Box>
                                             )}
                                         </Box>
-                                        <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
+                                        <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1, color: '#ffffff' }}>
                                             {max_streak || 0}
                                         </Typography>
-                                        <Typography variant="body2" sx={{ mb: 2, opacity: 0.9 }}>Best Streak</Typography>
-                                        <Typography variant="caption" sx={{ fontSize: '0.7rem', opacity: 0.95, lineHeight: 1.2, color: 'rgba(255,255,255,0.95)' }}>
-                                            Your personal best! Maximum consecutive correct answers achieved.
+                                        <Typography variant="body2" sx={{ mb: 2, opacity: 1, color: '#ffffff', fontWeight: 'bold' }}>Best Streak</Typography>
+                                        <Typography variant="caption" sx={{ fontSize: '0.7rem', opacity: 1, lineHeight: 1.2, color: '#ffffff', fontWeight: 'bold' }}>
+                                            Your personal best! Maximum consecutive correct answers achieved in a single session.
                                         </Typography>
                                     </CardContent>
                                 </Card>
@@ -745,10 +745,10 @@ export default function ProgressPage() {
 
                                                         <Box sx={{ mb: 1 }}>
                                                             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
-                                                                <Typography variant="caption" sx={{ fontSize: '0.7rem', opacity: 0.9 }}>
+                                                                <Typography variant="caption" sx={{ fontSize: '0.7rem', opacity: 1, color: '#ffffff', fontWeight: 'bold' }}>
                                                                     Progress: {goal.current}/{goal.target}
                                                                 </Typography>
-                                                                <Typography variant="caption" sx={{ fontSize: '0.7rem', opacity: 0.9 }}>
+                                                                <Typography variant="caption" sx={{ fontSize: '0.7rem', opacity: 1, color: '#ffffff', fontWeight: 'bold' }}>
                                                                     Reward: {goal.reward}
                                                                 </Typography>
                                                             </Box>

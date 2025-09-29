@@ -7,7 +7,11 @@
   justify-content: center;
   width: 100%;
   box-sizing: border-box;
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
 }
 
 .header::before {
@@ -31,7 +35,11 @@
   align-items: center;
   width: 100%;
   box-sizing: border-box;
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
 }
 
 .categories-header::before {
@@ -213,6 +221,7 @@
 
 .main-content {
   padding: 2rem;
+  margin-top: 120px; /* Espaço para os headers fixos (categories + search) */
   background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
   min-height: 100vh;
 }
@@ -257,6 +266,7 @@
 
   .main-content {
     padding: 1rem;
+    margin-top: 100px; /* Espaço menor para mobile */
   }
 
   .categories-buttons-container {

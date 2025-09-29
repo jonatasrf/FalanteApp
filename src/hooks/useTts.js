@@ -56,16 +56,28 @@ export const useTts = () => {
         }
     }, []);
 
-    // Função para pré-carregar múltiplos áudios
-    const preloadMultipleAudios = useCallback(async (audioPaths, maxConcurrent = 3) => {
+    // Função para pré-carregar múltiplos áudios com barra de progresso
+    const preloadMultipleAudios = useCallback(async (audioPaths, maxConcurrent = 3, onProgress) => {
         if (isPreloading.current) return;
 
         isPreloading.current = true;
+        let loadedCount = 0;
+        const totalCount = audioPaths.length;
+
+        const updateProgress = () => {
+            loadedCount++;
+            const progress = Math.round((loadedCount / totalCount) * 100);
+            if (onProgress) onProgress(progress);
+        };
+
         const promises = [];
 
         for (let i = 0; i < audioPaths.length; i += maxConcurrent) {
             const batch = audioPaths.slice(i, i + maxConcurrent);
-            const batchPromises = batch.map(path => preloadAudio(path));
+            const batchPromises = batch.map(async (path) => {
+                await preloadAudio(path);
+                updateProgress();
+            });
             promises.push(...batchPromises);
 
             // Pequena pausa entre batches para não sobrecarregar
@@ -77,8 +89,10 @@ export const useTts = () => {
         try {
             await Promise.allSettled(promises);
             console.log(`🎵 Pré-carregamento concluído: ${audioPaths.length} áudios`);
+            if (onProgress) onProgress(100);
         } catch (error) {
             console.error('Erro no pré-carregamento em lote:', error);
+            if (onProgress) onProgress(100); // Considerar completo mesmo com erro
         } finally {
             isPreloading.current = false;
         }

@@ -6,6 +6,7 @@ import ConversationListenType from './ConversationListenType';
 import ConversationQuiz from './ConversationQuiz';
 import ConversationCarousel from './ConversationCarousel';
 import RecommendedCarousel from './RecommendedCarousel';
+import IncompleteConversationsCarousel from './IncompleteConversationsCarousel';
 import Login from './Login';
 import DiamondPopup from './DiamondPopup';
 import LevelUpPopup from './LevelUpPopup';
@@ -36,6 +37,7 @@ export default function MainApp({ session }) {
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredConversations, setFilteredConversations] = useState([]);
+
 
   
 
@@ -376,6 +378,16 @@ export default function MainApp({ session }) {
 
         return (
           <div>
+            {/* Carrossel de Conversas Incompletas - aparece apenas se o usuário estiver LOGADO */}
+            {session && (
+              <IncompleteConversationsCarousel
+                conversations={conversationsToShow}
+                onConversationStart={handleConversationStart}
+                conversationProgress={_conversationProgress}
+                userLevel={userLevel}
+              />
+            )}
+
             {/* Carrossel de Recomendações - aparece apenas se o usuário estiver LOGADO */}
             {session && (
               <RecommendedCarousel

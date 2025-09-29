@@ -20,6 +20,8 @@ export default function ConversationListenType({ conversation, onConversationCom
     const textFieldRef = useRef(null);
 
     const { speak, preloadMultipleAudios, loadingProgress } = useTts();
+    const [globalAudioPreloadProgress, setGlobalAudioPreloadProgress] = useState(0);
+    const [isPreloadingGlobal, setIsPreloadingGlobal] = useState(false);
     const { incrementCorrectSentences, resetStreak, updateConversationProgress, conversationProgress } = useUserProgress();
 
     const currentPhrase = conversation.phrases[currentPhraseIndex];
@@ -291,7 +293,14 @@ export default function ConversationListenType({ conversation, onConversationCom
 
             if (audioPaths.length > 0) {
                 console.log(`🎵 Pré-carregando ${audioPaths.length} áudios da conversa...`);
-                preloadMultipleAudios(audioPaths, 2); // Carregar 2 por vez para não sobrecarregar
+                setIsPreloadingGlobal(true);
+
+                preloadMultipleAudios(audioPaths, 2, (progress) => {
+                    setGlobalAudioPreloadProgress(progress);
+                    if (progress === 100) {
+                        setTimeout(() => setIsPreloadingGlobal(false), 1000); // Manter visível por 1 segundo
+                    }
+                });
             }
         }
     }, [conversation.id, conversation.phrases, preloadMultipleAudios]);
@@ -424,8 +433,18 @@ export default function ConversationListenType({ conversation, onConversationCom
             setCurrentPhraseIndex(prevIndex => prevIndex + 1);
             setUserInput('');
             setIsCorrect(false);
-            setFeedback({ message: 'Listen to the phrase first.', type: 'default', severity: 'info' });
-            textFieldRef.current?.focus();
+            setFeedback({ message: 'Playing audio...', type: 'default', severity: 'info' });
+
+            // Sempre executar áudio quando passar para próxima frase
+            setTimeout(() => {
+                speak(conversation.phrases[currentPhraseIndex + 1], () => {
+                    setFeedback({ message: 'Now type what you heard.', type: 'default', severity: 'info' });
+                    textFieldRef.current?.focus();
+                }, (errorEvent) => {
+                    setFeedback({ message: `Audio error: ${errorEvent.error || errorEvent.message || 'Unknown error'}`, type: 'incorrect', severity: 'error' });
+                    textFieldRef.current?.focus();
+                });
+            }, 100);
 
             // Salvar progresso quando ir para próxima frase
             updateConversationProgress(conversation.id, {

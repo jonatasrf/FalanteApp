@@ -167,10 +167,18 @@ serve(async (req) => {
 -- Após colar o código, clique em "Deploy Function"
 -- Espere aparecer: "Function deployed successfully"
 
--- PASSO 4: TESTAR
--- ==============
--- Execute este comando no SQL Editor para testar:
--- SELECT * FROM edge_functions WHERE name = 'delete-account';
+-- PASSO 4: VERIFICAR SE FOI IMPOSTADA
+-- ===================================
+-- ⚠️ IMPORTANTE: Edge Functions NÃO são tabelas SQL comuns do Supabase!
+-- Elas são armazenadas em um sistema separado do Edge Runtime.
+--
+-- ✅ FORMA CORRETA de verificar se a função foi criada:
+-- 1. Vá para: Supabase Dashboard → Edge Functions (no menu esquerdo)
+-- 2. Procure pela função "delete-account"
+-- 3. Se aparecer na lista, foi criada com sucesso
+--
+-- ❌ NÃO USE SQL: Este não funciona pois não é uma tabela:
+-- SELECT * FROM edge_functions WHERE name = 'delete-account'; -- ERRO!
 
 -- PASSO 5: FRONTEND JÁ ESTÁ CONFIGURADO
 -- ====================================

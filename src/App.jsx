@@ -7,6 +7,7 @@ import airbnbTheme from './contexts/ThemeContext';
 import { supabase } from './supabaseClient';
 import MainApp from './components/MainApp';
 import './App.css';
+import './airbnb-theme.css';
 
 function App() {
   const [session, setSession] = useState(null);

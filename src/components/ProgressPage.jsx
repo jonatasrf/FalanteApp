@@ -133,21 +133,45 @@ export default function ProgressPage() {
 
                 {/* Stats Cards */}
                 <Box sx={{ width: '100%', mb: 4, display: 'flex', justifyContent: 'center' }}>
-                    <Box sx={{ maxWidth: 1000, width: '100%' }}>
-                        <Grid container spacing={3} justifyContent="center">
+                    <Box sx={{ maxWidth: 1200, width: '100%' }}>
+                        <Grid container spacing={4} justifyContent="center">
                             <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                                 <Card sx={{
-                                    background: 'linear-gradient(135deg, #2c3e50 0%, #34495e 100%)',
+                                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                                     color: 'white',
                                     height: '100%',
-                                    border: '1px solid rgba(255,255,255,0.1)'
+                                    border: '1px solid rgba(255,255,255,0.1)',
+                                    position: 'relative',
+                                    overflow: 'hidden',
+                                    '&::before': {
+                                        content: '""',
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        right: 0,
+                                        bottom: 0,
+                                        background: 'radial-gradient(circle at 30% 20%, rgba(255,255,255,0.2) 0%, transparent 50%)',
+                                        pointerEvents: 'none'
+                                    }
                                 }}>
-                                    <CardContent sx={{ textAlign: 'center', p: 3 }}>
-                                        <SchoolIcon sx={{ fontSize: 40, mb: 1, color: '#3498db' }} />
-                                        <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+                                    <CardContent sx={{ textAlign: 'center', p: 3, position: 'relative', zIndex: 1 }}>
+                                        <Box sx={{
+                                            width: 60,
+                                            height: 60,
+                                            borderRadius: '50%',
+                                            background: 'rgba(255,255,255,0.2)',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            margin: '0 auto 1rem',
+                                            boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
+                                        }}>
+                                            <SchoolIcon sx={{ fontSize: 30, color: '#ffffff' }} />
+                                        </Box>
+                                        <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
                                             {level}
                                         </Typography>
-                                        <Typography variant="body2" sx={{ mb: 1 }}>Current Level</Typography>
+                                        <Typography variant="body2" sx={{ mb: 2, opacity: 0.9 }}>Current Level</Typography>
                                         <Typography variant="caption" sx={{ fontSize: '0.7rem', opacity: 0.8, lineHeight: 1.2 }}>
                                             Earn levels by completing conversations. Each level requires more sentences to advance.
                                         </Typography>
@@ -157,17 +181,42 @@ export default function ProgressPage() {
 
                             <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                                 <Card sx={{
-                                    background: 'linear-gradient(135deg, #27ae60 0%, #2ecc71 100%)',
+                                    background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
                                     color: 'white',
                                     height: '100%',
-                                    border: '1px solid rgba(255,255,255,0.1)'
+                                    border: '1px solid rgba(255,255,255,0.1)',
+                                    position: 'relative',
+                                    overflow: 'hidden',
+                                    '&::before': {
+                                        content: '""',
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        right: 0,
+                                        bottom: 0,
+                                        background: 'radial-gradient(circle at 70% 80%, rgba(255,255,255,0.2) 0%, transparent 50%)',
+                                        pointerEvents: 'none'
+                                    }
                                 }}>
-                                    <CardContent sx={{ textAlign: 'center', p: 3 }}>
-                                        <DiamondOutlinedIcon sx={{ fontSize: 40, mb: 1, color: '#f39c12' }} />
-                                        <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+                                    <CardContent sx={{ textAlign: 'center', p: 3, position: 'relative', zIndex: 1 }}>
+                                        <Box sx={{
+                                            width: 60,
+                                            height: 60,
+                                            borderRadius: '50%',
+                                            background: 'rgba(255,255,255,0.2)',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            margin: '0 auto 1rem',
+                                            boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                                            animation: 'pulse 2s infinite'
+                                        }}>
+                                            <DiamondOutlinedIcon sx={{ fontSize: 30, color: '#ffffff' }} />
+                                        </Box>
+                                        <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
                                             {diamonds}
                                         </Typography>
-                                        <Typography variant="body2" sx={{ mb: 2 }}>Diamonds</Typography>
+                                        <Typography variant="body2" sx={{ mb: 2, opacity: 0.9 }}>Diamonds</Typography>
 
                                         {/* Progress bar for next diamond */}
                                         {(() => {
@@ -189,12 +238,13 @@ export default function ProgressPage() {
                                                         variant="determinate"
                                                         value={progressPercentage}
                                                         sx={{
-                                                            height: 6,
-                                                            borderRadius: 3,
+                                                            height: 8,
+                                                            borderRadius: 4,
                                                             backgroundColor: 'rgba(255,255,255,0.2)',
                                                             '& .MuiLinearProgress-bar': {
-                                                                borderRadius: 3,
-                                                                backgroundColor: '#f39c12'
+                                                                borderRadius: 4,
+                                                                background: 'linear-gradient(90deg, #ffd700, #ffed4e)',
+                                                                boxShadow: '0 0 8px rgba(255,215,0,0.5)'
                                                             }
                                                         }}
                                                     />
@@ -207,17 +257,41 @@ export default function ProgressPage() {
 
                             <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                                 <Card sx={{
-                                    background: 'linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)',
+                                    background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
                                     color: 'white',
                                     height: '100%',
-                                    border: '1px solid rgba(255,255,255,0.1)'
+                                    border: '1px solid rgba(255,255,255,0.1)',
+                                    position: 'relative',
+                                    overflow: 'hidden',
+                                    '&::before': {
+                                        content: '""',
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        right: 0,
+                                        bottom: 0,
+                                        background: 'radial-gradient(circle at 80% 20%, rgba(255,255,255,0.2) 0%, transparent 50%)',
+                                        pointerEvents: 'none'
+                                    }
                                 }}>
-                                    <CardContent sx={{ textAlign: 'center', p: 3 }}>
-                                        <TrendingUpIcon sx={{ fontSize: 40, mb: 1, color: '#e67e22' }} />
-                                        <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+                                    <CardContent sx={{ textAlign: 'center', p: 3, position: 'relative', zIndex: 1 }}>
+                                        <Box sx={{
+                                            width: 60,
+                                            height: 60,
+                                            borderRadius: '50%',
+                                            background: 'rgba(255,255,255,0.2)',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            margin: '0 auto 1rem',
+                                            boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
+                                        }}>
+                                            <TrendingUpIcon sx={{ fontSize: 30, color: '#ffffff' }} />
+                                        </Box>
+                                        <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
                                             {correct_sentences_count}
                                         </Typography>
-                                        <Typography variant="body2" sx={{ mb: 1 }}>Correct Sentences</Typography>
+                                        <Typography variant="body2" sx={{ mb: 2, opacity: 0.9 }}>Correct Sentences</Typography>
                                         <Typography variant="caption" sx={{ fontSize: '0.7rem', opacity: 0.8, lineHeight: 1.2 }}>
                                             Total sentences answered correctly. Every 100 correct sentences earns a diamond.
                                         </Typography>
@@ -227,17 +301,61 @@ export default function ProgressPage() {
 
                             <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                                 <Card sx={{
-                                    background: 'linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%)',
+                                    background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
                                     color: 'white',
                                     height: '100%',
-                                    border: '1px solid rgba(255,255,255,0.1)'
+                                    border: '1px solid rgba(255,255,255,0.1)',
+                                    position: 'relative',
+                                    overflow: 'hidden',
+                                    '&::before': {
+                                        content: '""',
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: 0,
+                                        right: 0,
+                                        bottom: 0,
+                                        background: 'radial-gradient(circle at 20% 80%, rgba(255,255,255,0.2) 0%, transparent 50%)',
+                                        pointerEvents: 'none'
+                                    }
                                 }}>
-                                    <CardContent sx={{ textAlign: 'center', p: 3 }}>
-                                        <TimelineIcon sx={{ fontSize: 40, mb: 1, color: '#f1c40f' }} />
-                                        <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+                                    <CardContent sx={{ textAlign: 'center', p: 3, position: 'relative', zIndex: 1 }}>
+                                        <Box sx={{
+                                            width: 60,
+                                            height: 60,
+                                            borderRadius: '50%',
+                                            background: 'rgba(255,255,255,0.2)',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            margin: '0 auto 1rem',
+                                            boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                                            position: 'relative'
+                                        }}>
+                                            <TimelineIcon sx={{ fontSize: 30, color: '#ffffff' }} />
+                                            {current_streak > 0 && (
+                                                <Box sx={{
+                                                    position: 'absolute',
+                                                    top: -8,
+                                                    right: -8,
+                                                    width: 24,
+                                                    height: 24,
+                                                    borderRadius: '50%',
+                                                    background: '#ff4757',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    fontSize: '0.7rem',
+                                                    fontWeight: 'bold',
+                                                    boxShadow: '0 2px 8px rgba(0,0,0,0.3)'
+                                                }}>
+                                                    🔥
+                                                </Box>
+                                            )}
+                                        </Box>
+                                        <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
                                             {current_streak}
                                         </Typography>
-                                        <Typography variant="body2" sx={{ mb: 1 }}>Current Streak</Typography>
+                                        <Typography variant="body2" sx={{ mb: 2, opacity: 0.9 }}>Current Streak</Typography>
                                         <Typography variant="caption" sx={{ fontSize: '0.7rem', opacity: 0.8, lineHeight: 1.2 }}>
                                             Consecutive correct answers. Resets to 0 when you make an error.
                                         </Typography>

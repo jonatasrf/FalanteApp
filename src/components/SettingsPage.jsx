@@ -40,10 +40,11 @@ export default function SettingsPage() {
                         width: '100%',
                         mb: 4,
                         p: 6,
-                        background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)',
-                        color: '#ffffff',
+                        background: 'linear-gradient(135deg, #FFFFFF 0%, #F7F7F7 50%, #EBEBEB 100%)',
+                        color: '#484848',
                         position: 'relative',
                         textAlign: 'center',
+                        borderBottom: '1px solid #EBEBEB',
                         '&::before': {
                             content: '""',
                             position: 'absolute',
@@ -52,8 +53,8 @@ export default function SettingsPage() {
                             right: 0,
                             bottom: 0,
                             background: `
-                                radial-gradient(circle at 20% 80%, rgba(0, 255, 255, 0.2) 0%, transparent 50%),
-                                radial-gradient(circle at 80% 20%, rgba(255, 107, 107, 0.2) 0%, transparent 50%)
+                                radial-gradient(circle at 20% 80%, rgba(255, 56, 92, 0.05) 0%, transparent 50%),
+                                radial-gradient(circle at 80% 20%, rgba(0, 132, 137, 0.05) 0%, transparent 50%)
                             `,
                             pointerEvents: 'none'
                         }
@@ -63,8 +64,7 @@ export default function SettingsPage() {
                         <Typography variant="h3" component="h1" gutterBottom sx={{
                             fontWeight: 'bold',
                             fontSize: '3rem',
-                            textShadow: '0 0 20px rgba(0, 255, 255, 0.8), 0 0 40px rgba(0, 255, 255, 0.4)',
-                            background: 'linear-gradient(45deg, #00ffff, #ff6b6b)',
+                            background: 'linear-gradient(45deg, #FF385C, #008489)',
                             backgroundClip: 'text',
                             WebkitBackgroundClip: 'text',
                             WebkitTextFillColor: 'transparent'
@@ -73,9 +73,8 @@ export default function SettingsPage() {
                         </Typography>
 
                         <Typography variant="h5" sx={{
-                            color: '#ffffff',
-                            fontSize: '1.5rem',
-                            textShadow: '0 0 15px rgba(0, 255, 255, 0.6)'
+                            color: '#767676',
+                            fontSize: '1.5rem'
                         }}>
                             Manage your account settings ⚙️
                         </Typography>
@@ -87,31 +86,38 @@ export default function SettingsPage() {
                     <Card sx={{
                         width: '100%',
                         p: 4,
-                        background: 'linear-gradient(135deg, #2c3e50 0%, #34495e 100%)',
-                        color: 'white',
-                        border: '1px solid rgba(255,255,255,0.1)'
+                        background: '#FFFFFF',
+                        color: '#484848',
+                        border: '1px solid #EBEBEB',
+                        boxShadow: '0 2px 16px rgba(0, 0, 0, 0.08)'
                     }}>
                         <CardContent>
                             <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-                                <SettingsIcon sx={{ mr: 2, color: '#00ffff', fontSize: 30 }} />
-                                <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+                                <SettingsIcon sx={{ mr: 2, color: '#FF385C', fontSize: 30 }} />
+                                <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#484848' }}>
                                     Account Settings
                                 </Typography>
                             </Box>
 
-                            <Typography variant="body1" sx={{ mb: 4, opacity: 0.9 }}>
+                            <Typography variant="body1" sx={{ mb: 4, color: '#767676' }}>
                                 Here you can manage your account preferences and settings.
                             </Typography>
 
                             {/* Account Management Section */}
                             <Box sx={{ mb: 4 }}>
-                                <Typography variant="h6" sx={{ mb: 2, color: '#00ffff' }}>
+                                <Typography variant="h6" sx={{ mb: 2, color: '#FF385C', fontWeight: 'bold' }}>
                                     Account Management
                                 </Typography>
 
-                                <Box sx={{ p: 3, backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: 2, border: '1px solid rgba(255,255,255,0.1)' }}>
-                                    <Typography variant="body1" sx={{ mb: 2 }}>
-                                        <strong>Danger Zone:</strong> These actions are permanent and cannot be undone.
+                                <Box sx={{
+                                    p: 3,
+                                    backgroundColor: '#FFF8E1',
+                                    borderRadius: 2,
+                                    border: '1px solid #FFCC02',
+                                    borderLeft: '4px solid #FF385C'
+                                }}>
+                                    <Typography variant="body1" sx={{ mb: 2, color: '#484848' }}>
+                                        <strong style={{ color: '#D32F2F' }}>Danger Zone:</strong> These actions are permanent and cannot be undone.
                                     </Typography>
 
                                     <Button
@@ -122,9 +128,12 @@ export default function SettingsPage() {
                                             px: 4,
                                             py: 1.5,
                                             fontWeight: 'bold',
+                                            borderColor: '#D32F2F',
+                                            color: '#D32F2F',
                                             '&:hover': {
-                                                backgroundColor: 'error.main',
-                                                color: 'white'
+                                                backgroundColor: '#D32F2F',
+                                                color: 'white',
+                                                borderColor: '#D32F2F'
                                             }
                                         }}
                                         onClick={handleDeleteAccount}
@@ -136,7 +145,7 @@ export default function SettingsPage() {
 
                             {/* Future Settings Sections */}
                             <Box sx={{ opacity: 0.6 }}>
-                                <Typography variant="body2" sx={{ fontStyle: 'italic' }}>
+                                <Typography variant="body2" sx={{ fontStyle: 'italic', color: '#767676' }}>
                                     More settings options will be available in future updates.
                                 </Typography>
                             </Box>

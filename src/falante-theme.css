@@ -8,10 +8,10 @@
   width: 100%;
   box-sizing: border-box;
   position: fixed;
-  top: 0;
+  top: 70px; /* Aparece logo abaixo do CategoriesHeader */
   left: 0;
   right: 0;
-  z-index: 1000;
+  z-index: 999;
 }
 
 .header::before {
@@ -39,7 +39,7 @@
   top: 0;
   left: 0;
   right: 0;
-  z-index: 999;
+  z-index: 1000;
 }
 
 .categories-header::before {
@@ -221,7 +221,7 @@
 
 .main-content {
   padding: 2rem;
-  margin-top: 120px; /* Espaço para os headers fixos (categories + search) */
+  margin-top: 140px; /* Espaço para CategoriesHeader (70px) + Header (70px) */
   background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
   min-height: 100vh;
 }

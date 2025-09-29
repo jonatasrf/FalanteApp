@@ -96,12 +96,12 @@ export default function ConversationCarousel({ title, conversations, onConversat
                 className="conversation-card-image"
               />
               <div className="conversation-card-star" style={{
-                background: isCompleted ? 'linear-gradient(45deg, #FFD700, #FFA500)' : 'rgba(0, 0, 0, 0.3)',
-                color: isCompleted ? '#FFFFFF' : '#FFFFFF',
-                border: isCompleted ? '2px solid #FFD700' : 'none',
-                boxShadow: isCompleted ? '0 0 12px rgba(255, 215, 0, 0.6)' : '0 1px 3px rgba(0, 0, 0, 0.5)',
-                fontSize: isCompleted ? '1.8rem' : '1.5rem',
-                fontWeight: isCompleted ? 'bold' : 'normal'
+                background: isCompleted ? 'rgba(0, 0, 0, 0.3)' : 'rgba(0, 0, 0, 0.3)',
+                color: isCompleted ? '#FFD700' : '#FFFFFF',
+                border: 'none',
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.5)',
+                fontSize: '1.5rem',
+                fontWeight: 'normal'
               }}>
                 {isCompleted ? '⭐' : '☆'}
               </div>

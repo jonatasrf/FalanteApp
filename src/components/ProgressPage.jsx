@@ -477,18 +477,23 @@ export default function ProgressPage() {
                                     const today = new Date();
                                     const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-                                    // Create realistic simulated data based on current progress
-                                    const baseSentences = Math.max(5, Math.floor(correct_sentences_count / 10));
+                                    // Only show simulated data if user has some progress, otherwise show zeros
+                                    const hasProgress = correct_sentences_count > 0;
+                                    const baseSentences = hasProgress ? Math.max(5, Math.floor(correct_sentences_count / 10)) : 0;
+
                                     const simulatedData = Array.from({ length: 7 }, (_, i) => {
                                         const dayIndex = (today.getDay() - 6 + i + 7) % 7;
                                         const dayName = weekDays[dayIndex];
 
-                                        // Simulate realistic daily progress with some variation
-                                        let sentences;
-                                        if (i === 6) { // Today
-                                            sentences = Math.floor(baseSentences * (0.8 + Math.random() * 0.4));
-                                        } else {
-                                            sentences = Math.floor(baseSentences * (0.3 + Math.random() * 0.7));
+                                        let sentences = 0; // Default to zero for new users
+
+                                        if (hasProgress) {
+                                            // Only generate simulated data if user has progress
+                                            if (i === 6) { // Today
+                                                sentences = Math.floor(baseSentences * (0.8 + Math.random() * 0.4));
+                                            } else {
+                                                sentences = Math.floor(baseSentences * (0.3 + Math.random() * 0.7));
+                                            }
                                         }
 
                                         return {

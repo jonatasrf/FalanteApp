@@ -20,8 +20,6 @@ export default function ConversationListenType({ conversation, onConversationCom
     const textFieldRef = useRef(null);
 
     const { speak, preloadMultipleAudios, loadingProgress } = useTts();
-    const [globalAudioPreloadProgress, setGlobalAudioPreloadProgress] = useState(0);
-    const [isPreloadingGlobal, setIsPreloadingGlobal] = useState(false);
     const { incrementCorrectSentences, resetStreak, updateConversationProgress, conversationProgress } = useUserProgress();
 
     const currentPhrase = conversation.phrases[currentPhraseIndex];
@@ -293,14 +291,7 @@ export default function ConversationListenType({ conversation, onConversationCom
 
             if (audioPaths.length > 0) {
                 console.log(`🎵 Pré-carregando ${audioPaths.length} áudios da conversa...`);
-                setIsPreloadingGlobal(true);
-
-                preloadMultipleAudios(audioPaths, 2, (progress) => {
-                    setGlobalAudioPreloadProgress(progress);
-                    if (progress === 100) {
-                        setTimeout(() => setIsPreloadingGlobal(false), 1000); // Manter visível por 1 segundo
-                    }
-                });
+                preloadMultipleAudios(audioPaths, 2);
             }
         }
     }, [conversation.id, conversation.phrases, preloadMultipleAudios]);
@@ -308,8 +299,17 @@ export default function ConversationListenType({ conversation, onConversationCom
     // Carregar progresso salvo quando o componente monta
     useEffect(() => {
         const savedProgress = conversationProgress[conversation.id];
-        if (savedProgress && !savedProgress.dialogue_completed) {
-            setCurrentPhraseIndex(savedProgress.current_phrase_index || 0);
+        if (savedProgress) {
+            if (savedProgress.quiz_completed) {
+                // Se completou o quiz, mostrar interface de completo (com retry)
+                setIsPracticeComplete(true);
+            } else if (!savedProgress.dialogue_completed) {
+                // Se não completou ainda, continuar de onde parou
+                setCurrentPhraseIndex(savedProgress.current_phrase_index || 0);
+            } else {
+                // Se completou dialogo mas não quiz, começar do zero
+                setCurrentPhraseIndex(0);
+            }
         }
     }, [conversation.id, conversationProgress, conversation.phrases.length]);
 
@@ -458,6 +458,28 @@ export default function ConversationListenType({ conversation, onConversationCom
         }
     };
 
+    // Função para dar retry (reiniciar conversa completa)
+    const handleRetry = () => {
+        // Resetar tudo
+        setCurrentPhraseIndex(0);
+        setUserInput('');
+        setIsCorrect(false);
+        setIsPracticeComplete(false);
+        setFeedback({ message: 'Click "Speak" to hear the phrase, then type what you heard.', type: 'default', severity: 'info' });
+        setPhraseErrors({});
+        setDifficultyLevel('normal');
+        setConsecutiveCorrect(0);
+        setConsecutiveErrors(0);
+        textFieldRef.current?.focus();
+
+        // Resetar progresso no database
+        updateConversationProgress(conversation.id, {
+            current_phrase_index: 0,
+            dialogue_completed: false,
+            quiz_completed: false
+        });
+    };
+
     const handleKeyPress = (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
@@ -559,20 +581,63 @@ export default function ConversationListenType({ conversation, onConversationCom
         return (
             <Card sx={{ width: '100%' }}>
                 <CardContent>
-                    <Typography variant="h5" component="h2" gutterBottom>
-                        Full Dialogue: {conversation.title}
-                    </Typography>
-                    <List>
-                        {conversation.phrases.map((phrase, index) => (
-                            <ListItem key={index} secondaryAction={
-                                <IconButton edge="end" aria-label="play" onClick={() => speak(phrase)}>
-                                    <PlayArrowIcon />
-                                </IconButton>
-                            }>
-                                <ListItemText primary={phrase.text} />
-                            </ListItem>
-                        ))}
-                    </List>
+                    <Box sx={{ textAlign: 'center', mb: 3 }}>
+                        <Typography variant="h3" sx={{ mb: 1 }}>🎉</Typography>
+                        <Typography variant="h5" component="h2" gutterBottom>
+                            Congratulations!
+                        </Typography>
+                        <Typography variant="body1" sx={{ color: '#666', mb: 2 }}>
+                            You have successfully completed: <strong>{conversation.title}</strong>
+                        </Typography>
+                    </Box>
+
+                    <Box sx={{ mb: 3 }}>
+                        <List>
+                            {conversation.phrases.map((phrase, index) => (
+                                <ListItem key={index} secondaryAction={
+                                    <IconButton edge="end" aria-label="play" onClick={() => speak(phrase)}>
+                                        <PlayArrowIcon />
+                                    </IconButton>
+                                }>
+                                    <ListItemText
+                                        primary={`${index + 1}. ${phrase.text}`}
+                                        sx={{
+                                            '& .MuiListItemText-primary': {
+                                                color: '#666'
+                                            }
+                                        }}
+                                    />
+                                </ListItem>
+                            ))}
+                        </List>
+                    </Box>
+
+                    <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleRetry}
+                            sx={{
+                                px: 3,
+                                py: 1.5,
+                                borderRadius: 2,
+                                fontWeight: 'bold'
+                            }}
+                        >
+                            🔄 Try Again
+                        </Button>
+                        <Button
+                            variant="outlined"
+                            onClick={() => onConversationComplete(conversation)}
+                            sx={{
+                                px: 3,
+                                py: 1.5,
+                                borderRadius: 2
+                            }}
+                        >
+                            ✅ Back to Conversations
+                        </Button>
+                    </Box>
                 </CardContent>
             </Card>
         );
@@ -606,7 +671,7 @@ export default function ConversationListenType({ conversation, onConversationCom
                 <Box sx={{ mb: 2 }}>
                     <LinearProgress
                         variant="determinate"
-                        value={((currentPhraseIndex + 1) / conversation.phrases.length) * 100}
+                        value={((currentPhraseIndex) / conversation.phrases.length) * 100}
                         sx={{
                             height: 8,
                             borderRadius: 4,
@@ -618,7 +683,7 @@ export default function ConversationListenType({ conversation, onConversationCom
                         }}
                     />
                     <Typography variant="caption" sx={{ color: '#e0e0e0', mt: 0.5, display: 'block', textAlign: 'center' }}>
-                        {Math.round(((currentPhraseIndex + 1) / conversation.phrases.length) * 100)}% Complete
+                        {Math.round((currentPhraseIndex / conversation.phrases.length) * 100)}% Complete
                     </Typography>
                 </Box>
 

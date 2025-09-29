@@ -11,8 +11,8 @@ export default function IncompleteConversationsCarousel({ conversations, onConve
   const incompleteConversations = useMemo(() => {
     return conversations.filter(conv => {
       const progress = conversationProgress && conversationProgress[conv.id];
-      // Considerar incompleta se não tem progresso OU não completou tanto dialogo quanto quiz
-      return !progress || !progress.dialogue_completed || !progress.quiz_completed;
+      // Considerar incompleta se não tem progresso OU não completou o card completamente
+      return !progress || !progress.quiz_completed;
     });
   }, [conversations, conversationProgress]);
 
@@ -92,17 +92,9 @@ export default function IncompleteConversationsCarousel({ conversations, onConve
         {sortedIncompleteConversations.map((conv) => {
           const progress = conversationProgress && conversationProgress[conv.id];
 
-          // Calcular progresso: dialogo ou quiz incompleto
-          let progressStatus = 'Not Started';
-          if (progress) {
-            if (!progress.dialogue_completed && !progress.quiz_completed) {
-              progressStatus = 'Start';
-            } else if (progress.dialogue_completed && !progress.quiz_completed) {
-              progressStatus = 'Quiz Missing';
-            } else if (!progress.dialogue_completed && progress.quiz_completed) {
-              progressStatus = 'Dialogue Missing';
-            }
-          }
+          // Simplificar: apenas verificar se está completo ou não
+          const isCompleted = progress && progress.quiz_completed;
+          const progressStatus = isCompleted ? 'Complete' : 'Incomplete';
 
           return (
             <div
@@ -110,10 +102,8 @@ export default function IncompleteConversationsCarousel({ conversations, onConve
               className="conversation-card continue-card"
               onClick={() => onConversationStart(conv)}
               style={{
-                border: progressStatus === 'Not Started' ? '2px solid #FF6B6B' : '2px solid #FFE066',
-                background: progressStatus === 'Not Started' ?
-                  'linear-gradient(135deg, #FFF5F5 0%, #FFFFFF 100%)' :
-                  'linear-gradient(135deg, #FFF8E1 0%, #FFFFFF 100%)'
+                border: '2px solid #FFE066',
+                background: 'linear-gradient(135deg, #FFF8E1 0%, #FFFFFF 100%)'
               }}
             >
               <img

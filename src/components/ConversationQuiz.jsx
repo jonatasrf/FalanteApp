@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Card, CardContent, Typography, Button, Box, Radio, RadioGroup, FormControlLabel, FormControl, FormLabel, LinearProgress } from '@mui/material';
+import { Card, CardContent, Typography, Button, Box, Radio, RadioGroup, FormControlLabel, FormControl, FormLabel, LinearProgress, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import { useUserProgress } from '../contexts/UserProgressContext';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
 
-export default function ConversationQuiz({ conversation, onQuizComplete }) {
+export default function ConversationQuiz({ conversation, onQuizComplete, onBackToConversations }) {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [userAnswers, setUserAnswers] = useState({});
     const [showResults, setShowResults] = useState(false);
@@ -47,9 +49,7 @@ export default function ConversationQuiz({ conversation, onQuizComplete }) {
         });
     };
 
-    const handleFinishQuiz = () => {
-        onQuizComplete();
-    };
+
 
     return (
         <Card sx={{ width: '100%' }}>
@@ -85,15 +85,94 @@ export default function ConversationQuiz({ conversation, onQuizComplete }) {
                     </Box>
                 ) : (
                     <Box>
-                        <Typography variant="h6">Results</Typography>
-                        <Typography variant="body1">You got {score} out of {conversation.objectiveQuestions.length} correct!</Typography>
-                        <LinearProgress variant="determinate" value={(score / conversation.objectiveQuestions.length) * 100} sx={{ mt: 2 }} />
-                        <Box sx={{ mt: 2, display: 'flex', gap: 1 }}>
-                            <Button variant="outlined" onClick={handleRetry}>
-                                Try Again
+                        <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                            📊 Quiz Results
+                        </Typography>
+                        <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
+                            You got {score} out of {conversation.objectiveQuestions.length} correct!
+                        </Typography>
+                        <LinearProgress
+                            variant="determinate"
+                            value={(score / conversation.objectiveQuestions.length) * 100}
+                            sx={{
+                                height: 12,
+                                borderRadius: 6,
+                                mb: 3,
+                                '& .MuiLinearProgress-bar': {
+                                    backgroundColor: score === conversation.objectiveQuestions.length ? '#4caf50' : '#2196f3'
+                                }
+                            }}
+                        />
+
+                        {/* Detailed Results */}
+                        <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 'bold' }}>
+                            📝 Question Review:
+                        </Typography>
+                        <List sx={{ width: '100%', mb: 3 }}>
+                            {conversation.objectiveQuestions.map((question, index) => {
+                                const userAnswer = userAnswers[index];
+                                const isCorrect = userAnswer === question.correctAnswer;
+
+                                return (
+                                    <ListItem key={index} sx={{
+                                        border: '1px solid #e0e0e0',
+                                        borderRadius: 1,
+                                        mb: 1,
+                                        backgroundColor: isCorrect ? 'rgba(76, 175, 80, 0.1)' : 'rgba(244, 67, 54, 0.1)'
+                                    }}>
+                                        <ListItemIcon>
+                                            {isCorrect ?
+                                                <CheckCircleIcon sx={{ color: '#4caf50' }} /> :
+                                                <CancelIcon sx={{ color: '#f44336' }} />
+                                            }
+                                        </ListItemIcon>
+                                        <ListItemText
+                                            primary={
+                                                <Typography variant="body1" sx={{ fontWeight: 'medium' }}>
+                                                    {index + 1}. {question.question}
+                                                </Typography>
+                                            }
+                                            secondary={
+                                                <Box>
+                                                    <Typography variant="body2" sx={{color: isCorrect ? '#4caf50' : '#f44336', fontWeight: 'bold'}}>
+                                                        Your answer: {userAnswer || 'Not answered'}
+                                                    </Typography>
+                                                    {!isCorrect && (
+                                                        <Typography variant="body2" sx={{color: '#4caf50', fontWeight: 'bold', mt: 0.5}}>
+                                                            Correct answer: {question.correctAnswer}
+                                                        </Typography>
+                                                    )}
+                                                </Box>
+                                            }
+                                        />
+                                    </ListItem>
+                                );
+                            })}
+                        </List>
+
+                        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
+                            <Button
+                                variant="outlined"
+                                onClick={handleRetry}
+                                sx={{
+                                    px: 3,
+                                    py: 1.5,
+                                    borderRadius: 2
+                                }}
+                            >
+                                🔄 Try Again
                             </Button>
-                            <Button variant="contained" onClick={handleFinishQuiz}>
-                                Back to Home
+                            <Button
+                                variant="contained"
+                                onClick={() => onBackToConversations && onBackToConversations()}
+                                sx={{
+                                    px: 3,
+                                    py: 1.5,
+                                    borderRadius: 2,
+                                    fontWeight: 'bold'
+                                }}
+                            >
+                                ✅ Back to Conversations
                             </Button>
                         </Box>
                     </Box>

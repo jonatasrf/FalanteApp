@@ -628,7 +628,7 @@ export default function ConversationListenType({ conversation, onConversationCom
                         <Button
                             variant="contained"
                             color="primary"
-                            onClick={isQuizIncomplete ? () => onConversationComplete(conversation) : handleRetry}
+                            onClick={handleRetry}
                             sx={{
                                 px: 3,
                                 py: 1.5,
@@ -636,7 +636,7 @@ export default function ConversationListenType({ conversation, onConversationCom
                                 fontWeight: 'bold'
                             }}
                         >
-                            {isQuizIncomplete ? '🧠 Take Quiz' : '🔄 Try Again'}
+                            🔄 Try Again
                         </Button>
                         <Button
                             variant="outlined"

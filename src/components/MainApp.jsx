@@ -437,7 +437,7 @@ export default function MainApp({ session }) {
             />
             {quizReady && !isFullyCompleted && (
               <div style={{ marginTop: '2rem' }}>
-                <ConversationQuiz conversation={selectedConversation} onQuizComplete={handleQuizComplete} />
+                <ConversationQuiz conversation={selectedConversation} onQuizComplete={handleQuizComplete} onBackToConversations={handleBackToConversations} />
               </div>
             )}
           </>

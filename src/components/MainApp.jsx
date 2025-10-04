@@ -111,6 +111,16 @@ export default function MainApp({ session }) {
           } else if (nextButton && !nextButton.disabled) {
             nextButton.click();
           }
+        } else if (event.key === '+' || event.key === '=') {
+          event.preventDefault();
+          // Dispatch custom event for speed increase
+          const speedUpEvent = new CustomEvent('speedUp');
+          document.dispatchEvent(speedUpEvent);
+        } else if (event.key === '-' || event.key === '_') {
+          event.preventDefault();
+          // Dispatch custom event for speed decrease
+          const speedDownEvent = new CustomEvent('speedDown');
+          document.dispatchEvent(speedDownEvent);
         }
       } else if (activeView === VIEWS.CONVERSATION_QUIZ) {
         // Conversation Quiz shortcuts

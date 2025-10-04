@@ -3,11 +3,13 @@ import { normalizeText, generateWordDiffHtml } from '../utils.js';
 import { useTts } from '../hooks/useTts';
 import { useUserProgress } from '../contexts/UserProgressContext';
 import {
-    Button, Card, CardContent, Typography, TextField, Box, LinearProgress, List, ListItem, ListItemText, IconButton
+  Button, Card, CardContent, Typography, TextField, Box, LinearProgress, List, ListItem, ListItemText, IconButton, Menu, MenuItem
 } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import SpeedIcon from '@mui/icons-material/Speed';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 export default function ConversationListenType({ conversation, onConversationComplete, onBackToConversations }) {
     const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
@@ -19,12 +21,21 @@ export default function ConversationListenType({ conversation, onConversationCom
 
     const textFieldRef = useRef(null);
 
-    const { speak, preloadMultipleAudios, loadingProgress } = useTts();
+    const {
+    speak,
+    preloadMultipleAudios,
+    loadingProgress,
+    playbackRate,
+    increasePlaybackRate,
+    decreasePlaybackRate,
+    formatPlaybackRate
+  } = useTts();
     const { incrementCorrectSentences, resetStreak, updateConversationProgress, conversationProgress } = useUserProgress();
 
     const currentPhrase = conversation.phrases[currentPhraseIndex];
 
-    // Estado para rastrear erros por frase
+    // Estado para menu de velocidade
+    const [speedMenuAnchor, setSpeedMenuAnchor] = useState(null);
     const [phraseErrors, setPhraseErrors] = useState({});
 
     // Sistema de dificuldade progressiva
@@ -296,6 +307,25 @@ export default function ConversationListenType({ conversation, onConversationCom
         }
     }, [conversation.id, conversation.phrases, preloadMultipleAudios]);
 
+    // Listeners para atalhos de teclado de velocidade (disparados pelo MainApp)
+    useEffect(() => {
+        const handleSpeedUp = () => {
+            increasePlaybackRate();
+        };
+
+        const handleSpeedDown = () => {
+            decreasePlaybackRate();
+        };
+
+        document.addEventListener('speedUp', handleSpeedUp);
+        document.addEventListener('speedDown', handleSpeedDown);
+
+        return () => {
+            document.removeEventListener('speedUp', handleSpeedUp);
+            document.removeEventListener('speedDown', handleSpeedDown);
+        };
+    }, [increasePlaybackRate, decreasePlaybackRate]);
+
     // Carregar progresso salvo quando o componente monta
     useEffect(() => {
         const savedProgress = conversationProgress[conversation.id];
@@ -317,6 +347,34 @@ export default function ConversationListenType({ conversation, onConversationCom
 
     // Removido salvamento automático durante digitação para evitar conflitos
 
+    const handleSpeedMenuOpen = (event) => {
+        setSpeedMenuAnchor(event.currentTarget);
+    };
+
+    const handleSpeedMenuClose = () => {
+        setSpeedMenuAnchor(null);
+    };
+
+    const setSpeed = (speed) => {
+        // Calcular diferença e ajustar
+        const current = playbackRate;
+        const diff = speed - current;
+
+        if (diff > 0) {
+            // Precisamos aumentar
+            for (let i = 0; i < diff / 0.25; i++) {
+                setTimeout(increasePlaybackRate, i * 10);
+            }
+        } else if (diff < 0) {
+            // Precisamos diminuir
+            for (let i = 0; i < Math.abs(diff) / 0.25; i++) {
+                setTimeout(decreasePlaybackRate, i * 10);
+            }
+        }
+
+        handleSpeedMenuClose();
+    };
+
     useEffect(() => {
         if (!isPracticeComplete && currentPhrase) {
             const settings = getDifficultySettings();
@@ -337,7 +395,7 @@ export default function ConversationListenType({ conversation, onConversationCom
                 setFeedback({ message: 'Click "Speak" to hear the phrase, then type what you heard.', type: 'default', severity: 'info' });
             }
         }
-    }, [currentPhrase, isPracticeComplete, currentPhraseIndex, speak, difficultyLevel]);
+    }, [currentPhrase, isPracticeComplete, currentPhraseIndex, speak, difficultyLevel, playbackRate]);
 
     useEffect(() => {
         if (textFieldRef.current && !isPracticeComplete && currentPhrase) {
@@ -767,6 +825,63 @@ export default function ConversationListenType({ conversation, onConversationCom
                     </Button>
                 </Box>
 
+                {/* 🎵 CONTROLE DE VELOCIDADE DE ÁUDIO (COMPACTO) */}
+                <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center' }}>
+                    <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={handleSpeedMenuOpen}
+                        startIcon={<SpeedIcon />}
+                        endIcon={<ExpandMoreIcon />}
+                        sx={{
+                            color: '#00ffff',
+                            borderColor: 'rgba(0, 255, 255, 0.3)',
+                            minWidth: 'auto',
+                            px: 2,
+                            '&:hover': {
+                                backgroundColor: 'rgba(0, 255, 255, 0.05)',
+                                borderColor: '#00ffff'
+                            }
+                        }}
+                    >
+                        {formatPlaybackRate(playbackRate)}
+                    </Button>
+                    <Menu
+                        anchorEl={speedMenuAnchor}
+                        open={Boolean(speedMenuAnchor)}
+                        onClose={handleSpeedMenuClose}
+                        PaperProps={{
+                            sx: {
+                                bgcolor: 'rgba(0, 0, 0, 0.9)',
+                                border: '1px solid rgba(0, 255, 255, 0.3)',
+                                minWidth: '120px'
+                            }
+                        }}
+                    >
+                        {[0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0].map((speed) => (
+                            <MenuItem
+                                key={speed}
+                                selected={playbackRate === speed}
+                                onClick={() => setSpeed(speed)}
+                                sx={{
+                                    color: playbackRate === speed ? '#00ffff' : '#ccc',
+                                    '&:hover': {
+                                        backgroundColor: 'rgba(0, 255, 255, 0.1)'
+                                    },
+                                    '&.Mui-selected': {
+                                        backgroundColor: 'rgba(0, 255, 255, 0.1)',
+                                        '&:hover': {
+                                            backgroundColor: 'rgba(0, 255, 255, 0.2)'
+                                        }
+                                    }
+                                }}
+                            >
+                                {speed.toFixed(2)}x
+                            </MenuItem>
+                        ))}
+                    </Menu>
+                </Box>
+
                 <Box sx={{
                     mt: 2,
                     p: 2,
@@ -786,6 +901,9 @@ export default function ConversationListenType({ conversation, onConversationCom
                         </Typography>
                         <Typography variant="body2" sx={{ color: '#aaa', fontSize: '0.875rem' }}>
                             <strong>Enter</strong> - Check/Next
+                        </Typography>
+                        <Typography variant="body2" sx={{ color: '#aaa', fontSize: '0.875rem' }}>
+                            <strong>+ / -</strong> - Speed up/slow down
                         </Typography>
                     </Box>
                 </Box>

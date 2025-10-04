@@ -3,6 +3,8 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 export const useTts = () => {
     const [isSpeaking, setIsSpeaking] = useState(false);
     const [loadingProgress, setLoadingProgress] = useState(0);
+    const [playbackRate, setPlaybackRate] = useState(1.0); // Velocidade de reprodução: 0.5x até 2.0x
+    const playbackRateRef = useRef(1.0); // Ref para velocidade atual (evita stale closures)
     const currentAudioRef = useRef(null);
     const audioCache = useRef(new Map()); // Cache para armazenar áudios pré-carregados
     const isPreloading = useRef(false);
@@ -142,6 +144,7 @@ export const useTts = () => {
         }
 
         window.speechSynthesis.__speakTimeout = setTimeout(async () => {
+            console.log(`🔊 SPEAK FUNCTION - playbackRate atual: ${playbackRate} (ref: ${playbackRateRef.current})`);
             setIsSpeaking(true);
             setLoadingProgress(0);
 
@@ -158,6 +161,9 @@ export const useTts = () => {
                     audio = new Audio();
                     audio.preload = 'auto';
                     audio.src = audioPath;
+                    // DEFINIR VELOCIDADE INICIAL PARA NOVOS ÁUDIOS - USAR REF PARA EVITAR STALE CLOSURES
+                    audio.playbackRate = playbackRateRef.current;
+                    console.log(`🎵 Novo áudio criado com velocidade inicial ${audio.playbackRate}x: ${audioPath}`);
 
                     // Mostrar progresso de carregamento
                     audio.onprogress = () => {
@@ -198,6 +204,10 @@ export const useTts = () => {
                 }
 
                 currentAudioRef.current = audio;
+
+                // CONFIGURAR VELOCIDADE DE REPRODUÇÃO - USAR REF PARA EVITAR STALE CLOSURES
+                audio.playbackRate = playbackRateRef.current;
+                console.log(`▶️ Reproduzindo áudio em ${playbackRateRef.current}x velocidade: ${audioPath}`);
 
                 // Configurar eventos
                 audio.onended = () => {
@@ -243,6 +253,66 @@ export const useTts = () => {
         setLoadingProgress(0);
     }, []);
 
+    // Função para aplicar velocidade em áudios em cache
+    const applyPlaybackRateToCachedAudios = useCallback((newRate) => {
+        console.log(`🔧 Aplicando velocidade ${newRate}x a todos os áudios em cache`);
+
+        // Aplicar no áudio sendo reproduzido atualmente
+        if (currentAudioRef.current && !currentAudioRef.current.paused) {
+            currentAudioRef.current.playbackRate = newRate;
+            console.log(`🎵 Velocidade aplicada ao áudio em reprodução: ${newRate}x`);
+        }
+
+        // Aplicar em todos os áudios carregados no cache
+        let cachedCount = 0;
+        audioCache.current.forEach((cached) => {
+            if (cached.audio && cached.loaded) {
+                cached.audio.playbackRate = newRate;
+                cachedCount++;
+            }
+        });
+
+        if (cachedCount > 0) {
+            console.log(`📦 Velocidade ${newRate}x aplicada a ${cachedCount} áudios no cache`);
+        }
+    }, []);
+
+    // Função para aumentar velocidade de reprodução
+    const increasePlaybackRate = useCallback(() => {
+        setPlaybackRate(currentRate => {
+            const newRate = Math.min(currentRate + 0.25, 2.0);
+            console.log(`⏭️ Velocidade aumentada para ${newRate}x`);
+            playbackRateRef.current = newRate; // Atualizar ref
+            applyPlaybackRateToCachedAudios(newRate);
+            return newRate;
+        });
+    }, [applyPlaybackRateToCachedAudios]);
+
+    // Função para diminuir velocidade de reprodução
+    const decreasePlaybackRate = useCallback(() => {
+        setPlaybackRate(currentRate => {
+            const newRate = Math.max(currentRate - 0.25, 0.5);
+            console.log(`⏮️ Velocidade diminuída para ${newRate}x`);
+            playbackRateRef.current = newRate; // Atualizar ref
+            applyPlaybackRateToCachedAudios(newRate);
+            return newRate;
+        });
+    }, [applyPlaybackRateToCachedAudios]);
+
+    // Função para resetar velocidade
+    const resetPlaybackRate = useCallback(() => {
+        const newRate = 1.0;
+        setPlaybackRate(newRate);
+        playbackRateRef.current = newRate; // Atualizar ref
+        console.log(`🔄 Velocidade resetada para ${newRate}x`);
+        applyPlaybackRateToCachedAudios(newRate);
+    }, [applyPlaybackRateToCachedAudios]);
+
+    // Função para formatar velocidade para exibição
+    const formatPlaybackRate = useCallback((rate) => {
+        return `${rate.toFixed(1)}x`;
+    }, []);
+
     // Cleanup ao desmontar componente
     useEffect(() => {
         return () => {
@@ -267,6 +337,12 @@ export const useTts = () => {
         loadingProgress,
         preloadAudio,
         preloadMultipleAudios,
-        cacheSize: audioCache.current.size
+        cacheSize: audioCache.current.size,
+        // NOVOS CONTROLES DE VELOCIDADE
+        playbackRate,
+        increasePlaybackRate,
+        decreasePlaybackRate,
+        resetPlaybackRate,
+        formatPlaybackRate
     };
 };

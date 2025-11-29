@@ -3,13 +3,14 @@ import { normalizeText, generateWordDiffHtml } from '../utils.js';
 import { useTts } from '../hooks/useTts';
 import { useUserProgress } from '../contexts/UserProgressContext';
 import {
-  Button, Card, CardContent, Typography, TextField, Box, LinearProgress, List, ListItem, ListItemText, IconButton, Menu, MenuItem
+    Button, Card, CardContent, Typography, TextField, Box, List, ListItem, ListItemText, IconButton, Menu, MenuItem
 } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import SpeedIcon from '@mui/icons-material/Speed';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import FeedbackDisplay from './FeedbackDisplay';
+import DifficultyBadge from './DifficultyBadge';
+import ProgressBar from './ProgressBar';
 
 export default function ConversationListenType({ conversation, onConversationComplete, onBackToConversations }) {
     const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
@@ -22,14 +23,14 @@ export default function ConversationListenType({ conversation, onConversationCom
     const textFieldRef = useRef(null);
 
     const {
-    speak,
-    preloadMultipleAudios,
-    loadingProgress,
-    playbackRate,
-    increasePlaybackRate,
-    decreasePlaybackRate,
-    formatPlaybackRate
-  } = useTts();
+        speak,
+        preloadMultipleAudios,
+        loadingProgress,
+        playbackRate,
+        increasePlaybackRate,
+        decreasePlaybackRate,
+        formatPlaybackRate
+    } = useTts();
     const { incrementCorrectSentences, resetStreak, updateConversationProgress, conversationProgress } = useUserProgress();
 
     const currentPhrase = conversation.phrases[currentPhraseIndex];
@@ -301,7 +302,7 @@ export default function ConversationListenType({ conversation, onConversationCom
                 .filter(Boolean);
 
             if (audioPaths.length > 0) {
-                console.log(`🎵 Pré-carregando ${audioPaths.length} áudios da conversa...`);
+                // console.log(`🎵 Pré-carregando ${audioPaths.length} áudios da conversa...`);
                 preloadMultipleAudios(audioPaths, 2);
             }
         }
@@ -543,99 +544,13 @@ export default function ConversationListenType({ conversation, onConversationCom
 
 
     const handleKeyPress = (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
+        if (e.key === 'Enter') {
             e.preventDefault();
             if (!isCorrect) {
                 handleCheck();
             } else {
                 handleNextPhrase();
             }
-        }
-    };
-
-    const getFeedbackSx = () => {
-        const baseSx = {
-            p: 3,
-            borderRadius: 2,
-            mb: 2,
-            display: 'flex',
-            alignItems: 'flex-start',
-            gap: 2,
-            position: 'relative',
-            overflow: 'hidden',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-            transition: 'all 0.3s ease-in-out'
-        };
-
-        switch (feedback.severity) {
-            case 'success':
-                return {
-                    ...baseSx,
-                    bgcolor: 'linear-gradient(135deg, #4caf50 0%, #66bb6a 100%)',
-                    color: 'white',
-                    border: '2px solid #4caf50',
-                    '&::before': {
-                        content: '""',
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        height: '4px',
-                        background: 'linear-gradient(90deg, #4caf50, #66bb6a, #4caf50)',
-                        animation: 'successPulse 2s ease-in-out infinite'
-                    }
-                };
-            case 'warning':
-                return {
-                    ...baseSx,
-                    bgcolor: 'linear-gradient(135deg, #ff9800 0%, #ffb74d 100%)',
-                    color: 'white',
-                    border: '2px solid #ff9800',
-                    '&::before': {
-                        content: '""',
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        height: '4px',
-                        background: 'linear-gradient(90deg, #ff9800, #ffb74d, #ff9800)',
-                        animation: 'warningPulse 2s ease-in-out infinite'
-                    }
-                };
-            case 'error':
-                return {
-                    ...baseSx,
-                    bgcolor: 'linear-gradient(135deg, #f44336 0%, #ef5350 100%)',
-                    color: 'white',
-                    border: '2px solid #f44336',
-                    '&::before': {
-                        content: '""',
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        height: '4px',
-                        background: 'linear-gradient(90deg, #f44336, #ef5350, #f44336)',
-                        animation: 'errorShake 0.5s ease-in-out'
-                    }
-                };
-            case 'info':
-                return {
-                    ...baseSx,
-                    bgcolor: 'linear-gradient(135deg, #2196f3 0%, #42a5f5 100%)',
-                    color: 'white',
-                    border: '2px solid #2196f3'
-                };
-            default:
-                return { ...baseSx, bgcolor: 'background.paper', color: 'text.primary' };
-        }
-    };
-
-    const FeedbackIcon = () => {
-        switch (feedback.severity) {
-            case 'success': return <CheckCircleOutlineIcon />;
-            case 'error': return <HighlightOffIcon />;
-            default: return null;
         }
     };
 
@@ -723,39 +638,10 @@ export default function ConversationListenType({ conversation, onConversationCom
                     <Typography variant="subtitle1" gutterBottom>
                         Phrase {currentPhraseIndex + 1} of {conversation.phrases.length}
                     </Typography>
-                    <Box sx={{
-                        px: 2,
-                        py: 0.5,
-                        borderRadius: 1,
-                        bgcolor: difficultyLevel === 'easy' ? '#4caf50' :
-                                difficultyLevel === 'normal' ? '#ff9800' : '#f44336',
-                        color: 'white',
-                        fontSize: '0.75rem',
-                        fontWeight: 'bold',
-                        textTransform: 'uppercase'
-                    }}>
-                        {difficultyLevel === 'easy' ? '🐣 Easy' :
-                         difficultyLevel === 'normal' ? '⚖️ Normal' : '🔥 Hard'}
-                    </Box>
+                    <DifficultyBadge difficultyLevel={difficultyLevel} />
                 </Box>
-                <Box sx={{ mb: 2 }}>
-                    <LinearProgress
-                        variant="determinate"
-                        value={((currentPhraseIndex) / conversation.phrases.length) * 100}
-                        sx={{
-                            height: 8,
-                            borderRadius: 4,
-                            backgroundColor: 'rgba(0, 255, 255, 0.1)',
-                            '& .MuiLinearProgress-bar': {
-                                backgroundColor: '#00ffff',
-                                borderRadius: 4,
-                            }
-                        }}
-                    />
-                    <Typography variant="caption" sx={{ color: '#e0e0e0', mt: 0.5, display: 'block', textAlign: 'center' }}>
-                        {Math.round((currentPhraseIndex / conversation.phrases.length) * 100)}% Complete
-                    </Typography>
-                </Box>
+
+                <ProgressBar current={currentPhraseIndex} total={conversation.phrases.length} />
 
                 {/* Barra de progresso de carregamento de áudio */}
                 {loadingProgress > 0 && loadingProgress < 100 && (
@@ -763,7 +649,7 @@ export default function ConversationListenType({ conversation, onConversationCom
                         <Typography variant="body2" sx={{ color: '#00ffff', mb: 1 }}>
                             🔊 Carregando áudio... {loadingProgress}%
                         </Typography>
-                        <LinearProgress
+                        <ProgressBar
                             variant="determinate"
                             value={loadingProgress}
                             sx={{
@@ -779,15 +665,7 @@ export default function ConversationListenType({ conversation, onConversationCom
                     </Box>
                 )}
 
-                <Box sx={{
-                    ...getFeedbackSx(),
-                    minHeight: '80px',
-                    display: 'flex',
-                    alignItems: 'center'
-                }}>
-                    <FeedbackIcon />
-                    <Typography dangerouslySetInnerHTML={{ __html: feedback.message }} />
-                </Box>
+                <FeedbackDisplay feedback={feedback} />
 
                 <TextField
                     multiline
@@ -798,114 +676,91 @@ export default function ConversationListenType({ conversation, onConversationCom
                     onChange={(e) => {
                         setUserInput(e.target.value);
                         // Iniciar timer na primeira digitação
-                        if (!startTime && e.target.value.length === 1) {
+                        if (!startTime) {
                             setStartTime(Date.now());
                         }
                     }}
-                    onKeyPress={handleKeyPress}
+                    onKeyDown={handleKeyPress}
                     placeholder="Type what you hear..."
-                    disabled={!currentPhrase || isCorrect}
+                    sx={{ mb: 2 }}
                     ref={textFieldRef}
-                    autoFocus
-                    spellCheck={false}
-                    inputRef={(input) => {
-                        if (input && !isPracticeComplete && currentPhrase) {
-                            setTimeout(() => input.focus(), 200);
-                        }
+                    inputProps={{
+                        autoComplete: 'off',
+                        autoCorrect: 'off',
+                        spellCheck: 'false'
                     }}
-                    sx={{ mt: 1 }}
                 />
 
-                <Box sx={{ mt: 2, display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                    <Button id="speak-button" variant="contained" onClick={() => speak(currentPhrase)} disabled={!currentPhrase}>Speak</Button>
-                    <Button id="check-button" variant="outlined" onClick={handleCheck} disabled={!currentPhrase || isCorrect}>Check</Button>
-                    <Button id="hint-button" variant="outlined" onClick={giveHint} disabled={!currentPhrase || isCorrect}>Hint</Button>
-                    <Button id="next-button" variant="contained" color="secondary" onClick={handleNextPhrase} disabled={!isCorrect}>
-                        {currentPhraseIndex === conversation.phrases.length - 1 ? 'Finish Practice' : 'Next Phrase'}
-                    </Button>
-                </Box>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Box sx={{ display: 'flex', gap: 1 }}>
+                        <Button
+                            id="speak-button"
+                            variant="contained"
+                            color="primary"
+                            startIcon={<PlayArrowIcon />}
+                            onClick={() => speak(currentPhrase)}
+                            disabled={!currentPhrase}
+                        >
+                            Speak
+                        </Button>
+                        <Button
+                            id="hint-button"
+                            variant="outlined"
+                            onClick={giveHint}
+                            disabled={!currentPhrase || isCorrect}
+                        >
+                            Hint
+                        </Button>
 
-                {/* 🎵 CONTROLE DE VELOCIDADE DE ÁUDIO (COMPACTO) */}
-                <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center' }}>
-                    <Button
-                        variant="outlined"
-                        size="small"
-                        onClick={handleSpeedMenuOpen}
-                        startIcon={<SpeedIcon />}
-                        endIcon={<ExpandMoreIcon />}
-                        sx={{
-                            color: '#00ffff',
-                            borderColor: 'rgba(0, 255, 255, 0.3)',
-                            minWidth: 'auto',
-                            px: 2,
-                            '&:hover': {
-                                backgroundColor: 'rgba(0, 255, 255, 0.05)',
-                                borderColor: '#00ffff'
-                            }
-                        }}
-                    >
-                        {formatPlaybackRate(playbackRate)}
-                    </Button>
-                    <Menu
-                        anchorEl={speedMenuAnchor}
-                        open={Boolean(speedMenuAnchor)}
-                        onClose={handleSpeedMenuClose}
-                        PaperProps={{
-                            sx: {
-                                bgcolor: 'rgba(0, 0, 0, 0.9)',
-                                border: '1px solid rgba(0, 255, 255, 0.3)',
-                                minWidth: '120px'
-                            }
-                        }}
-                    >
-                        {[0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0].map((speed) => (
-                            <MenuItem
-                                key={speed}
-                                selected={playbackRate === speed}
-                                onClick={() => setSpeed(speed)}
-                                sx={{
-                                    color: playbackRate === speed ? '#00ffff' : '#ccc',
-                                    '&:hover': {
-                                        backgroundColor: 'rgba(0, 255, 255, 0.1)'
-                                    },
-                                    '&.Mui-selected': {
-                                        backgroundColor: 'rgba(0, 255, 255, 0.1)',
-                                        '&:hover': {
-                                            backgroundColor: 'rgba(0, 255, 255, 0.2)'
-                                        }
-                                    }
-                                }}
-                            >
-                                {speed.toFixed(2)}x
-                            </MenuItem>
-                        ))}
-                    </Menu>
-                </Box>
-
-                <Box sx={{
-                    mt: 2,
-                    p: 2,
-                    bgcolor: 'rgba(255,255,255,0.05)',
-                    borderRadius: 1,
-                    border: '1px solid rgba(255,255,255,0.1)'
-                }}>
-                    <Typography variant="subtitle2" sx={{ mb: 1, color: '#ccc', fontWeight: 'bold' }}>
-                        ⌨️ Keyboard Shortcuts:
-                    </Typography>
-                    <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 1 }}>
-                        <Typography variant="body2" sx={{ color: '#aaa', fontSize: '0.875rem' }}>
-                            <strong>Ctrl</strong> - Speak audio
-                        </Typography>
-                        <Typography variant="body2" sx={{ color: '#aaa', fontSize: '0.875rem' }}>
-                            <strong>Tab</strong> - Get hint
-                        </Typography>
-                        <Typography variant="body2" sx={{ color: '#aaa', fontSize: '0.875rem' }}>
-                            <strong>Enter</strong> - Check/Next
-                        </Typography>
-                        <Typography variant="body2" sx={{ color: '#aaa', fontSize: '0.875rem' }}>
-                            <strong>+ / -</strong> - Speed up/slow down
-                        </Typography>
+                        {/* Speed Control Button */}
+                        <Button
+                            id="speed-button"
+                            variant="outlined"
+                            startIcon={<SpeedIcon />}
+                            endIcon={<ExpandMoreIcon />}
+                            onClick={handleSpeedMenuOpen}
+                            sx={{ minWidth: '100px' }}
+                        >
+                            {formatPlaybackRate(playbackRate)}
+                        </Button>
+                        <Menu
+                            anchorEl={speedMenuAnchor}
+                            open={Boolean(speedMenuAnchor)}
+                            onClose={handleSpeedMenuClose}
+                        >
+                            {[0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0].map((rate) => (
+                                <MenuItem
+                                    key={rate}
+                                    onClick={() => setSpeed(rate)}
+                                    selected={playbackRate === rate}
+                                >
+                                    {rate}x
+                                </MenuItem>
+                            ))}
+                        </Menu>
                     </Box>
+
+                    {isCorrect ? (
+                        <Button
+                            id="next-button"
+                            variant="contained"
+                            color="success"
+                            onClick={handleNextPhrase}
+                            endIcon={<PlayArrowIcon />}
+                        >
+                            Next Phrase
+                        </Button>
+                    ) : (
+                        <Button
+                            id="check-button"
+                            variant="contained"
+                            color="secondary"
+                            onClick={handleCheck}
+                            disabled={!userInput.trim()}
+                        >
+                            Check
+                        </Button>
+                    )}
                 </Box>
             </CardContent>
         </Card>

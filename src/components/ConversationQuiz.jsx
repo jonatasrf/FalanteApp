@@ -42,14 +42,22 @@ export default function ConversationQuiz({ conversation, onQuizComplete, onBackT
         });
         setScore(correctCount);
         setShowResults(true);
+        // Only save the score, don't mark as completed yet so the component doesn't unmount
         updateConversationProgress(conversation.id, {
             quiz_score: correctCount,
-            quiz_max_score: conversation.objectiveQuestions.length,
-            quiz_completed: true
+            quiz_max_score: conversation.objectiveQuestions.length
         });
     };
 
-
+    const handleFinish = () => {
+        // Now mark as completed and exit
+        updateConversationProgress(conversation.id, {
+            quiz_completed: true
+        });
+        if (onBackToConversations) {
+            onBackToConversations();
+        }
+    };
 
     return (
         <Card sx={{ width: '100%' }}>
@@ -69,11 +77,11 @@ export default function ConversationQuiz({ conversation, onQuizComplete, onBackT
                                 onChange={handleAnswerChange}
                             >
                                 {currentQuestion.options.map((option, optIndex) => (
-                                    <FormControlLabel 
-                                        key={optIndex} 
-                                        value={option} 
-                                        control={<Radio />} 
-                                        label={option} 
+                                    <FormControlLabel
+                                        key={optIndex}
+                                        value={option}
+                                        control={<Radio />}
+                                        label={option}
                                         id={`option-${optIndex}`}
                                     />
                                 ))}
@@ -134,11 +142,11 @@ export default function ConversationQuiz({ conversation, onQuizComplete, onBackT
                                             }
                                             secondary={
                                                 <Box>
-                                                    <Typography variant="body2" sx={{color: isCorrect ? '#4caf50' : '#f44336', fontWeight: 'bold'}}>
+                                                    <Typography variant="body2" sx={{ color: isCorrect ? '#4caf50' : '#f44336', fontWeight: 'bold' }}>
                                                         Your answer: {userAnswer || 'Not answered'}
                                                     </Typography>
                                                     {!isCorrect && (
-                                                        <Typography variant="body2" sx={{color: '#4caf50', fontWeight: 'bold', mt: 0.5}}>
+                                                        <Typography variant="body2" sx={{ color: '#4caf50', fontWeight: 'bold', mt: 0.5 }}>
                                                             Correct answer: {question.correctAnswer}
                                                         </Typography>
                                                     )}
@@ -164,7 +172,7 @@ export default function ConversationQuiz({ conversation, onQuizComplete, onBackT
                             </Button>
                             <Button
                                 variant="contained"
-                                onClick={() => onBackToConversations && onBackToConversations()}
+                                onClick={handleFinish}
                                 sx={{
                                     px: 3,
                                     py: 1.5,

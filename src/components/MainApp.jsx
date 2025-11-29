@@ -39,7 +39,7 @@ export default function MainApp({ session }) {
   const [filteredConversations, setFilteredConversations] = useState([]);
 
 
-  
+
 
   // Redirect to home when user logs in
   useEffect(() => {
@@ -87,7 +87,7 @@ export default function MainApp({ session }) {
     }
   }, [searchTerm, conversations]);
 
-    const { isDiamondPopupOpen, diamondsEarned, closeDiamondPopup, isLevelUpPopupOpen, newLevel, levelUpMessage, closeLevelUpPopup, level: _level, diamonds: _diamonds, conversationProgress: _conversationProgress, isGuest: _isGuest } = useUserProgress();
+  const { isDiamondPopupOpen, diamondsEarned, closeDiamondPopup, isLevelUpPopupOpen, newLevel, levelUpMessage, closeLevelUpPopup, level: _level, diamonds: _diamonds, conversationProgress: _conversationProgress, isGuest: _isGuest } = useUserProgress();
 
   useEffect(() => {
     const handleGlobalKeyDown = (event) => {
@@ -170,37 +170,37 @@ export default function MainApp({ session }) {
 
   const renderView = () => {
     if (activeView === VIEWS.LOGIN) {
-        return <Login />;
+      return <Login />;
     }
     if (activeView === VIEWS.UPDATE_PASSWORD) {
-        return <UpdatePassword />;
+      return <UpdatePassword />;
     }
     if (activeView === VIEWS.PROFILE) {
-        return <ProgressPage />;
+      return <ProgressPage />;
     }
     if (activeView === 'Settings') {
-        return <SettingsPage />;
+      return <SettingsPage />;
     }
     if (activeView === VIEWS.DONATION) {
-        return <DonationPage />;
+      return <DonationPage />;
     }
     if (loading && activeView === VIEWS.HOME) {
-        return (
-            <div className="container">
-                <h1>Choose a Conversation</h1>
-                <div className="conversations-grid">
-                    {Array.from({ length: 6 }).map((_, index) => (
-                        <div key={index} className="conversation-card skeleton-card">
-                            <div className="skeleton-image"></div>
-                            <div className="conversation-card-content">
-                                <div className="skeleton-text skeleton-title"></div>
-                                <div className="skeleton-text skeleton-subtitle"></div>
-                            </div>
-                        </div>
-                    ))}
+      return (
+        <div className="container">
+          <h1>Choose a Conversation</h1>
+          <div className="conversations-grid">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <div key={index} className="conversation-card skeleton-card">
+                <div className="skeleton-image"></div>
+                <div className="conversation-card-content">
+                  <div className="skeleton-text skeleton-title"></div>
+                  <div className="skeleton-text skeleton-subtitle"></div>
                 </div>
-            </div>
-        );
+              </div>
+            ))}
+          </div>
+        </div>
+      );
     }
     if (loading) {
       return <p>Loading...</p>;
@@ -476,9 +476,9 @@ export default function MainApp({ session }) {
       />
       <main className="main-content">
         {!session && activeView !== VIEWS.LOGIN && (
-            <div className="alert alert-warning">
-                You are not logged in. Your progress will not be saved.
-            </div>
+          <div className="alert alert-warning">
+            You are not logged in. Your progress will not be saved.
+          </div>
         )}
         {renderView()}
       </main>
